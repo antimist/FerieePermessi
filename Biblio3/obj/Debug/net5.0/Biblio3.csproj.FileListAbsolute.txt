@@ -1,0 +1,16 @@
+C:\csharp\Biblio3\bin\Debug\net5.0\Biblio3.exe
+C:\csharp\Biblio3\bin\Debug\net5.0\Biblio3.deps.json
+C:\csharp\Biblio3\bin\Debug\net5.0\Biblio3.runtimeconfig.json
+C:\csharp\Biblio3\bin\Debug\net5.0\Biblio3.runtimeconfig.dev.json
+C:\csharp\Biblio3\bin\Debug\net5.0\Biblio3.dll
+C:\csharp\Biblio3\bin\Debug\net5.0\ref\Biblio3.dll
+C:\csharp\Biblio3\bin\Debug\net5.0\Biblio3.pdb
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.csproj.AssemblyReference.cache
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.AssemblyInfoInputs.cache
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.AssemblyInfo.cs
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.csproj.CoreCompileInputs.cache
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.dll
+C:\csharp\Biblio3\obj\Debug\net5.0\ref\Biblio3.dll
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.pdb
+C:\csharp\Biblio3\obj\Debug\net5.0\Biblio3.genruntimeconfig.cache

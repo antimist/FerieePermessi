@@ -1,0 +1,5 @@
+C:\csharp\init-Only\obj\Debug\net6.0\init-Only.csproj.AssemblyReference.cache
+C:\csharp\init-Only\obj\Debug\net6.0\init-Only.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\init-Only\obj\Debug\net6.0\init-Only.AssemblyInfoInputs.cache
+C:\csharp\init-Only\obj\Debug\net6.0\init-Only.AssemblyInfo.cs
+C:\csharp\init-Only\obj\Debug\net6.0\init-Only.csproj.CoreCompileInputs.cache

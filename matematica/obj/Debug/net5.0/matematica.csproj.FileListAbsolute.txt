@@ -1,0 +1,16 @@
+C:\csharp\matematica\obj\Debug\net5.0\matematica.csproj.AssemblyReference.cache
+C:\csharp\matematica\obj\Debug\net5.0\matematica.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\matematica\obj\Debug\net5.0\matematica.AssemblyInfoInputs.cache
+C:\csharp\matematica\obj\Debug\net5.0\matematica.AssemblyInfo.cs
+C:\csharp\matematica\obj\Debug\net5.0\matematica.csproj.CoreCompileInputs.cache
+C:\csharp\matematica\bin\Debug\net5.0\matematica.exe
+C:\csharp\matematica\bin\Debug\net5.0\matematica.deps.json
+C:\csharp\matematica\bin\Debug\net5.0\matematica.runtimeconfig.json
+C:\csharp\matematica\bin\Debug\net5.0\matematica.runtimeconfig.dev.json
+C:\csharp\matematica\bin\Debug\net5.0\matematica.dll
+C:\csharp\matematica\bin\Debug\net5.0\ref\matematica.dll
+C:\csharp\matematica\bin\Debug\net5.0\matematica.pdb
+C:\csharp\matematica\obj\Debug\net5.0\matematica.dll
+C:\csharp\matematica\obj\Debug\net5.0\ref\matematica.dll
+C:\csharp\matematica\obj\Debug\net5.0\matematica.pdb
+C:\csharp\matematica\obj\Debug\net5.0\matematica.genruntimeconfig.cache

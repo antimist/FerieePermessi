@@ -1,0 +1,16 @@
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.csproj.AssemblyReference.cache
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.AssemblyInfoInputs.cache
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.AssemblyInfo.cs
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.csproj.CoreCompileInputs.cache
+C:\csharp\ArrayQuadrato\bin\Debug\net5.0\ArrayQuadrato.exe
+C:\csharp\ArrayQuadrato\bin\Debug\net5.0\ArrayQuadrato.deps.json
+C:\csharp\ArrayQuadrato\bin\Debug\net5.0\ArrayQuadrato.runtimeconfig.json
+C:\csharp\ArrayQuadrato\bin\Debug\net5.0\ArrayQuadrato.runtimeconfig.dev.json
+C:\csharp\ArrayQuadrato\bin\Debug\net5.0\ArrayQuadrato.dll
+C:\csharp\ArrayQuadrato\bin\Debug\net5.0\ref\ArrayQuadrato.dll
+C:\csharp\ArrayQuadrato\bin\Debug\net5.0\ArrayQuadrato.pdb
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.dll
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ref\ArrayQuadrato.dll
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.pdb
+C:\csharp\ArrayQuadrato\obj\Debug\net5.0\ArrayQuadrato.genruntimeconfig.cache

@@ -1,0 +1,15 @@
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.csproj.AssemblyReference.cache
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.AssemblyInfoInputs.cache
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.AssemblyInfo.cs
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.csproj.CoreCompileInputs.cache
+C:\csharp\toplevel\bin\Debug\net6.0\toplevel.exe
+C:\csharp\toplevel\bin\Debug\net6.0\toplevel.deps.json
+C:\csharp\toplevel\bin\Debug\net6.0\toplevel.runtimeconfig.json
+C:\csharp\toplevel\bin\Debug\net6.0\toplevel.dll
+C:\csharp\toplevel\bin\Debug\net6.0\ref\toplevel.dll
+C:\csharp\toplevel\bin\Debug\net6.0\toplevel.pdb
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.dll
+C:\csharp\toplevel\obj\Debug\net6.0\ref\toplevel.dll
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.pdb
+C:\csharp\toplevel\obj\Debug\net6.0\toplevel.genruntimeconfig.cache

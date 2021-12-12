@@ -1,0 +1,16 @@
+C:\csharp\Condizioni\bin\Debug\net5.0\Condizioni.exe
+C:\csharp\Condizioni\bin\Debug\net5.0\Condizioni.deps.json
+C:\csharp\Condizioni\bin\Debug\net5.0\Condizioni.runtimeconfig.json
+C:\csharp\Condizioni\bin\Debug\net5.0\Condizioni.runtimeconfig.dev.json
+C:\csharp\Condizioni\bin\Debug\net5.0\Condizioni.dll
+C:\csharp\Condizioni\bin\Debug\net5.0\ref\Condizioni.dll
+C:\csharp\Condizioni\bin\Debug\net5.0\Condizioni.pdb
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.csproj.AssemblyReference.cache
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.AssemblyInfoInputs.cache
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.AssemblyInfo.cs
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.csproj.CoreCompileInputs.cache
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.dll
+C:\csharp\Condizioni\obj\Debug\net5.0\ref\Condizioni.dll
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.pdb
+C:\csharp\Condizioni\obj\Debug\net5.0\Condizioni.genruntimeconfig.cache

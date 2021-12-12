@@ -1,0 +1,16 @@
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.csproj.AssemblyReference.cache
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.AssemblyInfoInputs.cache
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.AssemblyInfo.cs
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.csproj.CoreCompileInputs.cache
+C:\csharp\IntegralTypes\bin\Debug\net5.0\IntegralTypes.exe
+C:\csharp\IntegralTypes\bin\Debug\net5.0\IntegralTypes.deps.json
+C:\csharp\IntegralTypes\bin\Debug\net5.0\IntegralTypes.runtimeconfig.json
+C:\csharp\IntegralTypes\bin\Debug\net5.0\IntegralTypes.runtimeconfig.dev.json
+C:\csharp\IntegralTypes\bin\Debug\net5.0\IntegralTypes.dll
+C:\csharp\IntegralTypes\bin\Debug\net5.0\ref\IntegralTypes.dll
+C:\csharp\IntegralTypes\bin\Debug\net5.0\IntegralTypes.pdb
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.dll
+C:\csharp\IntegralTypes\obj\Debug\net5.0\ref\IntegralTypes.dll
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.pdb
+C:\csharp\IntegralTypes\obj\Debug\net5.0\IntegralTypes.genruntimeconfig.cache

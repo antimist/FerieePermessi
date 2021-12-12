@@ -1,0 +1,16 @@
+C:\csharp\Asterischi\bin\Debug\net5.0\Asterischi.exe
+C:\csharp\Asterischi\bin\Debug\net5.0\Asterischi.deps.json
+C:\csharp\Asterischi\bin\Debug\net5.0\Asterischi.runtimeconfig.json
+C:\csharp\Asterischi\bin\Debug\net5.0\Asterischi.runtimeconfig.dev.json
+C:\csharp\Asterischi\bin\Debug\net5.0\Asterischi.dll
+C:\csharp\Asterischi\bin\Debug\net5.0\ref\Asterischi.dll
+C:\csharp\Asterischi\bin\Debug\net5.0\Asterischi.pdb
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.csproj.AssemblyReference.cache
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.AssemblyInfoInputs.cache
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.AssemblyInfo.cs
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.csproj.CoreCompileInputs.cache
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.dll
+C:\csharp\Asterischi\obj\Debug\net5.0\ref\Asterischi.dll
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.pdb
+C:\csharp\Asterischi\obj\Debug\net5.0\Asterischi.genruntimeconfig.cache
