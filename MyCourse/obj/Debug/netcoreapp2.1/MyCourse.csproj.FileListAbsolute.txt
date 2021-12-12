@@ -1,0 +1,16 @@
+C:\csharp\MyCourse\bin\Debug\netcoreapp2.1\MyCourse.deps.json
+C:\csharp\MyCourse\bin\Debug\netcoreapp2.1\MyCourse.runtimeconfig.json
+C:\csharp\MyCourse\bin\Debug\netcoreapp2.1\MyCourse.runtimeconfig.dev.json
+C:\csharp\MyCourse\bin\Debug\netcoreapp2.1\MyCourse.dll
+C:\csharp\MyCourse\bin\Debug\netcoreapp2.1\MyCourse.pdb
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.csproj.AssemblyReference.cache
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.GeneratedMSBuildEditorConfig.editorconfig
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.AssemblyInfoInputs.cache
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.AssemblyInfo.cs
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.csproj.CoreCompileInputs.cache
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.RazorAssemblyInfo.cache
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.RazorAssemblyInfo.cs
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.RazorTargetAssemblyInfo.cache
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.dll
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.pdb
+C:\csharp\MyCourse\obj\Debug\netcoreapp2.1\MyCourse.genruntimeconfig.cache
