@@ -20,11 +20,19 @@ namespace MyCourse
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
         {
-            if (env.IsDevelopment())
+            //if (env.IsDevelopment())
+            if(env.IsEnvironment("Development"))
             {
                 app.UseDeveloperExceptionPage();
+
+                //Aggiorniamo un file per notificare al BrowserSyngk che deve agiornare la pagina
+//               lifetime.ApplicationStarted.Register(() =>
+//               {
+//                   string filePath = Path.Combine(env.ContentRootPath, "bin/reloaded.txt");
+//                   File.WriteAllText(filePath, DateTime.Now.ToString());
+//               });
             }
             app.UseStaticFiles();
 
