@@ -19,20 +19,25 @@ namespace MyCourse.Controllers
 {
     public class CourserController : Controller
     {
-        public IActionResult Index()
+        private readonly ICourseService courseService;
+        public CourserController(ICourseService courseService)
         {
-            var curseService = new CourseService();
-            List<CourseViewModel> courses = curseService.GetCourses();
-            ViewData["Title"] ="Catalogo dei Corsi";
+            this.courseService = courseService;
+        }
+        public async Task<IActionResult> Index()
+        {
+            //var curseService = new CourseService();
+            List<CourseViewModel> courses = await courseService.GetCoursesAsync();
+            ViewData["Title"] = "Catalogo dei Corsi";
             return View(courses); //Content("Sono Index");
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-                var curseService = new CourseService();
-                CourseDetailViewModel viewModel = curseService.GetCourse(id);
-                ViewData["Title"] = viewModel.Title;
-                return View(viewModel);
+            //var curseService = new CourseService();
+            CourseDetailViewModel viewModel = await  courseService.GetCourseAsync(id);
+            ViewData["Title"] = viewModel.Title;
+            return View(viewModel);
         }
 
         public IActionResult Search(string title)

@@ -1,5 +1,5 @@
 @model List<CourseViewModel> 
-<h1>Catalogo dei corsi</h1>
+<h1>@ViewData["Title"]</h1>
 @foreach (CourseViewModel course in Model)
 {
 <hr>
@@ -29,7 +29,7 @@
     </div>
     <div class="col-md-2 price">
         @course.CurrentPrice
-        @if(!course.CurrentPrice.Equals(course.FullPrice))
+        @if(!course.CurrentPrice.Amount.Equals(course.FullPrice.Amount))
         {
             <br /><s>@course.FullPrice</s>
         } 
