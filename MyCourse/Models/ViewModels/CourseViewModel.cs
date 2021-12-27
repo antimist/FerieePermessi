@@ -6,7 +6,7 @@ namespace MyCourse.Models.ViewModels
 {
     public class CourseViewModel
     {
-        public int Id {get; set;}
+        public long Id {get; set;}
         public string Title {get; set;}
         public string ImagePath {get; set;}
         public string Author {get; set;}
