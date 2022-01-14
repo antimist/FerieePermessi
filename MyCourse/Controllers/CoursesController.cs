@@ -20,7 +20,7 @@ namespace MyCourse.Controllers
     public class CourserController : Controller
     {
         private readonly ICourseService courseService;
-        public CourserController(ICourseService courseService)
+        public CourserController(ICachedCourseService courseService)
         {
             this.courseService = courseService;
         }

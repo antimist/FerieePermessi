@@ -5,20 +5,29 @@ using MyCourse.Models.ViewModels;
 using System.Data;
 using System;
 using System.Threading.Tasks;
-//using MyCourse.Models.Services.Application;
-//using MyCourse.Models.ViewModels.CourseDetailViewModel;
+using Microsoft.Extensions.Options;
+using MyCourse.Models.Options;
+using Microsoft.Extensions.Logging;
+using MyCourse.Models.Exceptions;
 
 namespace MyCourse.Models.Services.Application
 {
     public class AdoNetCourseService : ICourseService
     {
         private readonly IDatabaseAccessor db;
-        public AdoNetCourseService(IDatabaseAccessor db)
+        private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
+        private readonly ILogger<AdoNetCourseService> logger;
+
+        public AdoNetCourseService(ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
+            this.coursesOptions = coursesOptions;
+            this.logger = logger;
             this.db = db;
         }
         public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
+            logger.LogInformation("Course {id} requested", id);
+
             FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}
                            ; SELECT Id, Title, Description, Duration FROM Lessons WHERE CourseId={id}";
 
@@ -26,9 +35,10 @@ namespace MyCourse.Models.Services.Application
 
             //Course
             var courseTable = dataSet.Tables[0];
-            if (courseTable.Rows.Count !=1)
+            if (courseTable.Rows.Count != 1)
             {
-                throw new InvalidOperationException($"Did not return exactly 1 row for Curse {id}");// da vedere
+                logger.LogWarning("Course {id} NOTTE FONDA!!", id);
+                throw new CourseNotFoundException(id);// da vedere
             }
             var courseRow = courseTable.Rows[0];
             var courseDetailViewModel = CourseDetailViewModel.FromDataRow(courseRow);
@@ -36,7 +46,8 @@ namespace MyCourse.Models.Services.Application
             //Curse lessons
             var lessonDataTable = dataSet.Tables[1];
 
-            foreach (DataRow lessonsRow in lessonDataTable.Rows) {
+            foreach (DataRow lessonsRow in lessonDataTable.Rows)
+            {
                 LessonViewModel lessonViewModel = LessonViewModel.FromDataRow(lessonsRow);
                 courseDetailViewModel.Lessons.Add(lessonViewModel);
             }
