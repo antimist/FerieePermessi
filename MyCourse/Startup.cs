@@ -42,14 +42,34 @@ namespace MyCourse
                 options.CacheProfiles.Add("Home", homeProfile);
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddTransient<ICourseService, AdoNetCourseService>();
-            //services.AddTransient<ICourseService, EfCoreCourseService>();
+            //services.AddTransient<ICourseService, AdoNetCourseService>();
+            services.AddTransient<ICourseService, EfCoreCourseService>();
             services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
-            //services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
+            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>(); // se vuoi disattivare la cache devi commentare questa riga
             services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
                 string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
                 optionsBuilder.UseSqlite(connectionString);
             });
+
+            #region Configurazione del sevizio di cache distribuita
+            
+            //Se vogiamo usare Redis, ecco le istruzioni per installarlo: https://docs.microsoft.com/it-it/aspnet/core/performance/caching/distributed?view=aspnetcore-2.2#distributed-redis-cache
+            //Bisogna anche installare il pacchetto NuGet: Microsoft.Extension.Caching.StackExchangeRedis
+            /*services.AddStackExchngeRedisCache(options => 
+            {
+                Configuration.Bind("DistributedCache:Redis", options);
+            });
+            */
+            //Se vogliamo usare Sql Server, ecco le istruzioni per preparare la tabella usata per la cache https://docs.microsoft.com/it-it/aspnet/core/performance/caching/distributed?view=aspnetcore-2.2#distributed-sql-server-cache
+            /* services.AddDistributedSqlServerCache(options =>
+            {
+                Configuration.Bind("DistributedCache:SqlServer", options);
+            });
+            */
+            //Se vogliamo usare la memoria, mentre siamo in sviluppo
+            //service.AddDistributedMemoryCache();
+
+            #endregion
 
             //Options
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));

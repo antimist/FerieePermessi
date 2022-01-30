@@ -6,6 +6,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Options;
+using MyCourse.Models.ValueTypes;
 
 namespace MyCourse.Models.Services.Infrastructure
 {
@@ -28,12 +29,18 @@ namespace MyCourse.Models.Services.Infrastructure
             var sqliteParameters = new List<SqliteParameter>();
             for (var i = 0; i< queryArguments.Length; i++)            
             {
+                if (queryArguments[i] is Sql)
+                {
+                    continue;
+                }
                 var parameter = new SqliteParameter(i.ToString(), queryArguments[i]);
                 sqliteParameters.Add(parameter);
                 queryArguments[i] = "@" + i;
             }
             string query = fromattableQuery.ToString();
 
+            System.Console.WriteLine(query);
+            
             string strConn = connectionStringOptions.CurrentValue.Default; // OLD strConn "Data Source=Data/MyCourse.db";
             using(var conn = new SqliteConnection(strConn))
             {
