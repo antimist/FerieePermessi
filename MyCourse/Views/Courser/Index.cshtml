@@ -1,3 +1,4 @@
+@using MyCourse.Models.ViewModels
 @model CourseListViewModel
     <div class="row">
         <div class="col-md-8">
@@ -25,7 +26,7 @@
 
 @foreach (CourseViewModel course in Model.Courses.Results)
 {
-    <partial name="Courses/_CourseLine" model="@course"></partial>
+    <partial name="Courser/_CourseLine" model="@course"></partial>
 }
 
 <vc:pagination-bar model="@Model"></vc:pagination-bar>

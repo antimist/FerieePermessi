@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@ using MyCourse.Models.Options;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.Services.Application.Courses;
+using Microsoft.Extensions.Hosting;
 
 namespace MyCourse
 {
@@ -40,7 +42,8 @@ namespace MyCourse
                 //homeProfile.VaryByQueryKeys= new string[] {"page"};
                 Configuration.Bind("ResponseCache:Home", homeProfile);
                 options.CacheProfiles.Add("Home", homeProfile);
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            //.AddRazorRunimeCompilation();
 
             //services.AddTransient<ICourseService, AdoNetCourseService>();
             services.AddTransient<ICourseService, EfCoreCourseService>();
@@ -78,7 +81,7 @@ namespace MyCourse
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime lifetime)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)  
         {
             //if (env.IsDevelopment())
             if (env.IsEnvironment("Development"))
@@ -98,13 +101,22 @@ namespace MyCourse
             
             app.UseStaticFiles();
 
+            app.UseRouting();
+
             app.UseResponseCaching();
+
+            //EndPointMiddleware
+            app.UseEndpoints(routeBuilder => {
+                routeBuilder.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
             //app.UseMvcWithDefaultRoute();
+            /*
             app.UseMvc(routeBuilder =>
             {
                 // /Courser/Detail/5
                 routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+            */
         }
     }
 }

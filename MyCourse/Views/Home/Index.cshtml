@@ -10,7 +10,7 @@
     <h2>Aggiunti di recente</h2>
     @foreach (CourseViewModel course in Model.MostRecentCourses)
     {
-        <partial name="Courses/_CourseLine" model="@course"></partial>
+        <partial name="Courser/_CourseLine" model="@course"></partial>
     }
 </section>
 
@@ -18,6 +18,6 @@
     <h2>I migiliori di sempre</h2>
     @foreach (CourseViewModel course in Model.BestRatingCourses)
     {
-        <partial name="Courses/_CourseLine" model="@course"></partial>
+        <partial name="Courser/_CourseLine" model="@course"></partial>
     }    
 </section>
