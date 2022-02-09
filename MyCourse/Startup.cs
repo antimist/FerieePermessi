@@ -48,14 +48,25 @@ namespace MyCourse
             #endif
             ;
             
-            services.AddTransient<ICourseService, AdoNetCourseService>();
-            //services.AddTransient<ICourseService, EfCoreCourseService>();
-            services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
+            //Usiamo ADO.NET o Entity Famework Core per l'accesso ai dati?
+            //var persistence = Persistence.EfCore;
+            //switch (persistence)
+            //{
+            //    case Persistence.AdoNet:
+                    //services.AddTransient<ICourseService, AdoNetCourseService>();
+                    services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
+            //    break;
+            //
+            //    case Persistance.EfCore:
+                    services.AddTransient<ICourseService, EfCoreCourseService>();
+                    services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
+                        string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
+                        optionsBuilder.UseSqlite(connectionString);
+                    });
+            //    break;
+            //}
+
             services.AddTransient<ICachedCourseService, MemoryCacheCourseService>(); // se vuoi disattivare la cache devi commentare questa riga
-            services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
-                string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
-                optionsBuilder.UseSqlite(connectionString);
-            });
 
             #region Configurazione del sevizio di cache distribuita
             

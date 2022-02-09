@@ -64,6 +64,12 @@ namespace MyCourse.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CourseCreateInputModel  inputModel)
         {
+            if(!ModelState.IsValid)
+            {
+                return View(inputModel);
+            }
+
+            
             //Convolgere un servizio applicativo in modo che il corso venga creato
             CourseDetailViewModel course = await courseService.CreateCurseAsync(inputModel);
             return RedirectToAction(nameof (Index));
