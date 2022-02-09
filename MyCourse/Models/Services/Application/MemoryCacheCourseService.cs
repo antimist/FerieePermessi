@@ -67,6 +67,10 @@ namespace MyCourse.Models.Services.Application
             //altrimenti uso il servizio applicativo sottostante, che recupererà sempre i valori dal database
             return courseService.GetCoursesAsync(model);
         }
-       
+
+        public Task<CourseDetailViewModel> CreateCurseAsync(CourseCreateInputModel inputModel)
+        {
+            return courseService.CreateCurseAsync(inputModel);
+        }
     }
 }

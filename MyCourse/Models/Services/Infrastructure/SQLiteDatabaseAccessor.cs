@@ -39,9 +39,10 @@ namespace MyCourse.Models.Services.Infrastructure
             }
             string query = fromattableQuery.ToString();
 
-            System.Console.WriteLine(query);
+            System.Console.WriteLine(fromattableQuery.Format, fromattableQuery.GetArguments());
             
-            string strConn = connectionStringOptions.CurrentValue.Default; // OLD strConn "Data Source=Data/MyCourse.db";
+              // OLD strConn "Data Source=Data/MyCourse.db";
+            string strConn = connectionStringOptions.CurrentValue.Default;
             using(var conn = new SqliteConnection(strConn))
             {
                 await conn.OpenAsync();

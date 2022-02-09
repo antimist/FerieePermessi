@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using MyCourse.Models.Entities;
 
 namespace MyCourse.Models.ViewModels
 {
@@ -22,6 +23,16 @@ namespace MyCourse.Models.ViewModels
             };            
             
             return lessonViewModel;
+        }
+
+        public static LessonViewModel FromEntity(Lesson lesson)
+        {
+            return new LessonViewModel
+            {
+                Id = lesson.Id,
+                Title = lesson.Title,
+                Duration = lesson.Duration
+            };
         }
     }
 
