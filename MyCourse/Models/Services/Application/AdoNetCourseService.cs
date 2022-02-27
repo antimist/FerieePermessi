@@ -12,6 +12,7 @@ using System.Linq;
 using MyCourse.Models.ValueTypes;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
+using Microsoft.Data.Sqlite;
 //using MyCourse.Controllers;
 namespace MyCourse.Models.Services.Application
 {
@@ -114,15 +115,27 @@ namespace MyCourse.Models.Services.Application
             string title  = inputModel.Title;
             string author = "Mario Rossi";
             //string sSQL   = $@"INSERT INTO Courses (Title, Author, ImagePath, CurrentPrice_Currency, CurrentPrice_Ammount, FullPrice_Currency, FullPrice_Ammount) VALUES ('{title}, {author}, '/Courses/default.png', 'EUR', 0, 'EUR', 0); SELECT last_insert_rowid();";
+            try 
+            {
+                var dataSet = await db.QueryAsync($@"INSERT INTO Courses (Title, Author, ImagePath, CurrentPrice_Amount, 
+                                                            CurrentPrice_Currency, FullPrice_Currency, FullPrice_Amount) 
+                                                     VALUES ({title}, {author}, '/Courses/default.png',  0, 'EUR', 'EUR', 0); 
+                                                     SELECT last_insert_rowid();"); 
 
-            var dataSet = await db.QueryAsync($@"INSERT INTO Courses (Title, Author, ImagePath, CurrentPrice_Amount, 
-                                                        CurrentPrice_Currency, FullPrice_Currency, FullPrice_Amount) 
-                                                 VALUES ({title}, {author}, '/Courses/default.png',  0, 'EUR', 'EUR', 0); 
-                                                 SELECT last_insert_rowid();"); 
-
-            int courseId = Convert.ToInt32(dataSet.Tables[0].Rows[0][0]);
-            CourseDetailViewModel course =await GetCourseAsync(courseId);
-            return course;
+                int courseId = Convert.ToInt32(dataSet.Tables[0].Rows[0][0]);
+                CourseDetailViewModel course =await GetCourseAsync(courseId);
+                return course;
+            }
+            catch (SqliteException exc) when (exc.SqliteErrorCode==19)
+            {
+                throw new CourseTitleUnaviableException(title, exc);
+            }
+        }
+        public async Task<bool> IsTitleAviableAsync(string title)
+        {
+            DataSet result = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title}");
+            bool titleAviable = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
+            return titleAviable;
         }
     }
 }

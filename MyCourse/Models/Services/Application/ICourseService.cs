@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MyCourse.Models.InputModels;
 //using MyCourse.Controllers;
 using MyCourse.Models.ViewModels;
-
 namespace MyCourse.Models.Services.Application
 {
     public interface ICourseService
@@ -15,5 +14,6 @@ namespace MyCourse.Models.Services.Application
          Task<List<CourseViewModel>> GetMostRecentCoursesAsync();
          Task<List<CourseViewModel>> GetBestRatingCoursesAsync();
         Task<CourseDetailViewModel> CreateCurseAsync(CourseCreateInputModel inputModel);
+        Task <bool> IsTitleAviableAsync(string title);
     }
 }

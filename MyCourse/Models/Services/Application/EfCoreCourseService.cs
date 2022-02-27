@@ -159,5 +159,11 @@ namespace MyCourse.Models.Services.Application.Courses
 
            return CourseDetailViewModel.FromEntity(course);
         }
+
+        public async Task<bool> IsTitleAviableAsync(string title)
+        {
+            bool  titleExists = await dbContext.Courses.AnyAsync(course => EF.Functions.Like(course.Title, title));
+            return !titleExists;
+        }
     }
 }

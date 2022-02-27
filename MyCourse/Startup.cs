@@ -53,12 +53,12 @@ namespace MyCourse
             //switch (persistence)
             //{
             //    case Persistence.AdoNet:
-                    //services.AddTransient<ICourseService, AdoNetCourseService>();
+                    services.AddTransient<ICourseService, AdoNetCourseService>();
                     services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
             //    break;
             //
             //    case Persistance.EfCore:
-                    services.AddTransient<ICourseService, EfCoreCourseService>();
+                    //services.AddTransient<ICourseService, EfCoreCourseService>();
                     services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
                         string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
                         optionsBuilder.UseSqlite(connectionString);

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Enums;
+using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModels;
@@ -64,16 +65,30 @@ namespace MyCourse.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CourseCreateInputModel  inputModel)
         {
-            if(!ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                ViewData["Title"] = "Nuovo Corso";
-                return View(inputModel);
+                try
+                {
+                    CourseDetailViewModel curse = await courseService.CreateCurseAsync(inputModel);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (CourseTitleUnaviableException)
+                {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo già esiste");
+                }
             }
 
-            
+            ViewData["Title"] = "Nuovo Corso";
+            return View(inputModel);            
             //Convolgere un servizio applicativo in modo che il corso venga creato
-            CourseDetailViewModel course = await courseService.CreateCurseAsync(inputModel);
-            return RedirectToAction(nameof (Index));
-        }               
+            //CourseDetailViewModel course = await courseService.CreateCurseAsync(inputModel);
+            //return RedirectToAction(nameof (Index));
+        }  
+
+        public async Task<IActionResult> IsTitleAviable(string title)
+        {
+            bool result = await courseService.IsTitleAviableAsync(title);
+            return Json(result);
+        }
     }
 }
