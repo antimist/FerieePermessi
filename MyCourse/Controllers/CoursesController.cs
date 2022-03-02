@@ -62,6 +62,38 @@ namespace MyCourse.Controllers
             return View(inputModel);
         } 
         
+      //public IActionResult Edit(int id)
+      //{
+      //    ViewData["Title"] = "Modifica Corso";
+      //    return View();
+      //}
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            ViewData["Title"] = "Modifica corso";
+            CourseEditInputModel inputModel = await courseService.GetCourseForEditingAsync(id);
+            return View(inputModel);
+        }  
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(CourseEditInputModel inputModel)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    CourseCreateInputModel course = await courseService.EditCourseAsync(inputModel);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (CourseTitleUnaviableException)
+                {
+                    ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo già esiste");
+                }
+            }
+
+            ViewData["Title"] = "Modifica corso";
+            return View(inputModel);
+        }
         [HttpPost]
         public async Task<IActionResult> Create(CourseCreateInputModel  inputModel)
         {

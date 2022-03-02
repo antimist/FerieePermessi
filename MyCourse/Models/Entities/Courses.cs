@@ -65,6 +65,23 @@ namespace MyCourse.Models.Entities
             CurrentPrice= newDiscountPrice;                
         }
 
+        public void ChangeEmail (string newEmail)
+        {
+            if(string.IsNullOrEmpty(newEmail))
+            {
+                throw new ArgumentException("Email can't be empty");
+            }
+            Email=newEmail;
+        }
+
+        public void ChangeDescription(string newDescription)
+        {
+            if(string.IsNullOrEmpty(newDescription))
+            {
+                throw new ArgumentException("Email can't be empty");
+            }
+            Description=newDescription;
+        }
         public virtual ICollection<Lesson> Lessons { get; private set; }
     }
 }

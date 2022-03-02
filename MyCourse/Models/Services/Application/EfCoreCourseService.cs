@@ -10,6 +10,7 @@ using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModels;
 using MyCourse.Models.Services.Application;
+using Microsoft.Data.Sqlite;
 
 namespace MyCourse.Models.Services.Application.Courses
 {
@@ -164,6 +165,27 @@ namespace MyCourse.Models.Services.Application.Courses
         {
             bool  titleExists = await dbContext.Courses.AnyAsync(course => EF.Functions.Like(course.Title, title));
             return !titleExists;
+        }
+
+        public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel inputModel)
+        {
+            Course course = await dbContext.Courses.FirstAsync(inputModel.Id);
+
+            course.ChangeTitle(inputModel.Title);
+            course.ChangePrices(inputModel.FullPrice, inputModel.CurrentPrice);
+            course.ChangeDescription(inputModel.Description);
+            course.ChangeEmail(inputModel.Email);
+
+           try
+           {
+               await dbContext.SaveChangesAsync();
+           }
+           catch (DbUpdateException exc ) when ((exc.InnerException as SqliteException)?.SqliteErrorCode ==19 )
+           {
+               throw new CourseTitleUnaviableException(inputModel.Title, exc);
+           } 
+
+           return CourseDetailViewModel.FromEntity(course);
         }
     }
 }

@@ -10,8 +10,7 @@ namespace MyCourse.Models.InputModels
         MinLength(10, ErrorMessage="Il titolo deve essere di almeno {1} caratteri"), 
         MaxLength(100, ErrorMessage="Il titolo deve essere di massimo {1} caratteri"), 
         RegularExpression(@"^[\w\s\.]+$", ErrorMessage="Titolo non valido"),
-        Remote(action: nameof(CourserController.IsTitleAviable), controller: "Courses", ErrorMessage ="Il titolo esiste già")]
+        Remote(action: nameof(CourserController.IsTitleAviable), controller: "Courser", ErrorMessage ="Il titolo esiste già")]
         public string Title {get; set;}
-        
-    }
+     }
 }
