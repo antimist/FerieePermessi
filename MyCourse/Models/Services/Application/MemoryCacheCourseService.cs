@@ -20,7 +20,6 @@ namespace MyCourse.Models.Services.Application
             this.memoryCache = memoryCache;
         }
 
-        // TODO: ricordati di usare memoryCache.Remove($"Course{id}") quando aggiorni i
         public Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
@@ -73,9 +72,22 @@ namespace MyCourse.Models.Services.Application
             return courseService.CreateCurseAsync(inputModel);
         }
 
-        public Task<bool> IsTitleAviableAsync(string title)
+        public Task<bool> IsTitleAviableAsync(string title, int id)
         {
-            return courseService.IsTitleAviableAsync(title);
+            return courseService.IsTitleAviableAsync(title, id);
         }
+
+        public Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
+        {
+            return courseService.GetCourseForEditingAsync(id);
+        }
+                
+        public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel inputModel)
+        {
+            CourseDetailViewModel viewModel = await courseService.EditCourseAsync(inputModel);
+            memoryCache.Remove($"Course{inputModel.Id}");
+            return viewModel;
+        }
+
     }
 }

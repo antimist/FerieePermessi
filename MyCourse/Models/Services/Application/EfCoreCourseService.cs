@@ -11,6 +11,7 @@ using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModels;
 using MyCourse.Models.Services.Application;
 using Microsoft.Data.Sqlite;
+using MyCourse.Models.Exceptions;
 
 namespace MyCourse.Models.Services.Application.Courses
 {
@@ -161,7 +162,7 @@ namespace MyCourse.Models.Services.Application.Courses
            return CourseDetailViewModel.FromEntity(course);
         }
 
-        public async Task<bool> IsTitleAviableAsync(string title)
+        public async Task<bool> IsTitleAviableAsync(string title, int id)
         {
             bool  titleExists = await dbContext.Courses.AnyAsync(course => EF.Functions.Like(course.Title, title));
             return !titleExists;
@@ -169,7 +170,7 @@ namespace MyCourse.Models.Services.Application.Courses
 
         public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel inputModel)
         {
-            Course course = await dbContext.Courses.FirstAsync(inputModel.Id);
+            Course course = await dbContext.Courses.FindAsync(inputModel.Id);
 
             course.ChangeTitle(inputModel.Title);
             course.ChangePrices(inputModel.FullPrice, inputModel.CurrentPrice);
@@ -187,5 +188,24 @@ namespace MyCourse.Models.Services.Application.Courses
 
            return CourseDetailViewModel.FromEntity(course);
         }
+
+        public async Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
+        {
+            IQueryable<CourseEditInputModel> queryLinq = dbContext.Courses
+                .AsNoTracking()
+                .Where(course => course.Id == id)
+                .Select(course => CourseEditInputModel.FromEntity(course)); //Usando metodi statici come FromEntity, la query potrebbe essere inefficiente. Mantenere il mapping nella lambda oppure usare un extension method personalizzato
+
+            CourseEditInputModel viewModel = await queryLinq.FirstOrDefaultAsync();
+
+            if (viewModel == null)
+            {
+                //logger.LogWarning("Course {id} not found", id);
+                throw new CourseNotFoundException(id);
+            }
+
+            return viewModel;
+        }        
+
     }
 }

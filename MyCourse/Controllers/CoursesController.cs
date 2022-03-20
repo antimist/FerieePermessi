@@ -82,8 +82,9 @@ namespace MyCourse.Controllers
             {
                 try
                 {
-                    CourseCreateInputModel course = await courseService.EditCourseAsync(inputModel);
-                    return RedirectToAction(nameof(Index));
+                    CourseDetailViewModel course = await courseService.EditCourseAsync(inputModel);
+                    TempData["ConfirmationMessage"] = "I dati sono stati salvati con successo";
+                    return RedirectToAction(nameof(Detail), new {id =inputModel.Id});
                 }
                 catch (CourseTitleUnaviableException)
                 {
@@ -117,9 +118,9 @@ namespace MyCourse.Controllers
             //return RedirectToAction(nameof (Index));
         }  
 
-        public async Task<IActionResult> IsTitleAviable(string title)
+        public async Task<IActionResult> IsTitleAviable(string title, int id=0)
         {
-            bool result = await courseService.IsTitleAviableAsync(title);
+            bool result = await courseService.IsTitleAviableAsync(title, id);
             return Json(result);
         }
     }

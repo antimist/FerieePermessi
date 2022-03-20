@@ -131,16 +131,17 @@ namespace MyCourse.Models.Services.Application
                 throw new CourseTitleUnaviableException(title, exc);
             }
         }
-        public async Task<bool> IsTitleAviableAsync(string title)
+        public async Task<bool> IsTitleAviableAsync(string title, int id)
         {
-            DataSet result = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title}");
+            DataSet result = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title} AND ID<>{id}");
             bool titleAviable = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
             return titleAviable;
         }
 
-        public async Task<CourseEditInputModel> GetCourseEditInputModelAsync(int id)
+        //public async Task<CourseEditInputModel> GetCourseEditInputModelAsync(int id)
+        public async Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
         {
-            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency, RowVersion FROM Courses WHERE Id={id} AND Status<>{nameof(CourseStatus.Deleted)}";
+            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}";
 
             DataSet dataSet = await db.QueryAsync(query);
 
@@ -159,7 +160,7 @@ namespace MyCourse.Models.Services.Application
         {
             try
             {
-                DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CourrentPrice_Currency={inputModel.CurrentPrice.Currency}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id = {inputModel.Id} ");
+                DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id = {inputModel.Id} ");
                 CourseDetailViewModel course = await GetCourseAsync(inputModel.Id);
                 return course;
             }
