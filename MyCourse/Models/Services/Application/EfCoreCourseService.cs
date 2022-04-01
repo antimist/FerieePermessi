@@ -177,6 +177,11 @@ namespace MyCourse.Models.Services.Application.Courses
             course.ChangeDescription(inputModel.Description);
             course.ChangeEmail(inputModel.Email);
 
+            string ImagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+            course.ChangeImagePath(ImagePath);
+
+            //dbContext.Update(course)
+
            try
            {
                await dbContext.SaveChangesAsync();

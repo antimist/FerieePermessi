@@ -23,6 +23,7 @@ namespace MyCourse.Models.Services.Application
         private readonly ILogger<AdoNetCourseService> logger;
         public AdoNetCourseService(ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
+            this.imagePersister = imagePersister;
             this.coursesOptions = coursesOptions;
             this.logger = logger;
             this.db = db;
@@ -158,16 +159,38 @@ namespace MyCourse.Models.Services.Application
 
         public async Task<CourseDetailViewModel> EditCourseAsync (CourseEditInputModel inputModel)
         {
+            //inputModel.Image.CopyToAsync
+
+            DataSet dataSet = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Id = {inputModel.Id}");
+            if (Convert.ToInt32(dataSet.Tables[0].Rows[0][0])==0)
+            {
+                throw new CourseNotFoundException(inputModel.Id);
+            }
+
             try
             {
                 DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id = {inputModel.Id} ");
-                CourseDetailViewModel course = await GetCourseAsync(inputModel.Id);
-                return course;
             }
             catch (SqliteException exc) when (exc.SqliteErrorCode == 19)
             {
                 throw new CourseTitleUnaviableException (inputModel.Title, exc);
             }
+
+            if (inputModel.Image != null)
+            {
+               string ImagePath =  await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+               DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET ImagePath={ImagePath} WHERE Id = {inputModel.Id} ");
+            }
+
+            CourseDetailViewModel course = await GetCourseAsync(inputModel.Id);
+            return course;
+        }
+
+        public async Task<bool> IsTitleAvliableAsync(string title, int id)
+        {
+            DataSet result = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title} AND id<>{id}");
+            bool titleAvailable = Convert.ToInt32(result.Tables[0].Rows[0][0]) ==0;
+            return titleAvailable;
         }
     }
 }

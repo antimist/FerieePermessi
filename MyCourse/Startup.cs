@@ -17,6 +17,10 @@ using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.Services.Application.Courses;
 using Microsoft.Extensions.Hosting;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
+using MyCourse.Customizations.ModelBinders;
+using Mycurse.Models.Services.Infrastructure;
 
 namespace MyCourse
 {
@@ -42,6 +46,7 @@ namespace MyCourse
                 //homeProfile.VaryByQueryKeys= new string[] {"page"};
                 Configuration.Bind("ResponseCache:Home", homeProfile);
                 options.CacheProfiles.Add("Home", homeProfile);
+                options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
             #if DEBUG
             .AddRazorRuntimeCompilation()
@@ -88,6 +93,9 @@ namespace MyCourse
 
             #endregion
 
+            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
+            services.AddSingleton<IImagePersister, MagickNetImagePersister>();
+
             //Options
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
@@ -114,6 +122,14 @@ namespace MyCourse
             }
             
             app.UseStaticFiles();
+
+            //Nel caso volessi impostare una Cultrue specifica....
+            /* var appCulture = CultureInfo.InvariantCulture;
+            app.UseRequestLocalization(new RequestLocalizationOptions 
+            {
+                DefaultRequestCulture = new RequestCulture(appCulture), 
+                SupportedCultures= new[] {appCulture}
+            }); */
 
             app.UseRouting();
 
