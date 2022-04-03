@@ -1,27 +1,34 @@
-using System.Collections.Generic;
-using MyCourse.Models.Services.Infrastructure;
-using MyCourse.Models.ViewModels;
-using System.Data;
 using System;
+using System.Collections.Generic;
+using System.Data;  // <-- sono rimasto qui
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using MyCourse.Models.Options;
-using Microsoft.Extensions.Logging;
-using MyCourse.Models.Exceptions;
-using System.Linq;
-using MyCourse.Models.ValueTypes;
-using MyCourse.Models.InputModels;
-using MyCourse.Models.Services.Application;
 using Microsoft.Data.Sqlite;
-//using MyCourse.Controllers;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MyCourse.Models.Exceptions;
+using MyCourse.Models.InputModels;
+using MyCourse.Models.Options;
+using MyCourse.Models.Services.Infrastructure;
+using MyCourse.Models.ValueTypes;
+using MyCourse.Models.ViewModels;
+using Mycurse.Models.Services.Infrastructure;
+
+/*using System.Linq;
+  using MyCourse.Controllers;
+  using MyCourse.Models.Services.Application;
+ using ImageMagick; */
+
 namespace MyCourse.Models.Services.Application
 {
     public class AdoNetCourseService : ICourseService
     {
         private readonly IDatabaseAccessor db;
+        private readonly IImagePersister imagePersister;
         private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
         private readonly ILogger<AdoNetCourseService> logger;
-        public AdoNetCourseService(ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesOptions)
+        
+
+        public AdoNetCourseService(ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IImagePersister imagePersister, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
             this.imagePersister = imagePersister;
             this.coursesOptions = coursesOptions;
@@ -169,7 +176,7 @@ namespace MyCourse.Models.Services.Application
 
             try
             {
-                DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id = {inputModel.Id} ");
+                dataSet = await db.QueryAsync($"UPDATE Courses SET Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id = {inputModel.Id} ");
             }
             catch (SqliteException exc) when (exc.SqliteErrorCode == 19)
             {
@@ -178,8 +185,14 @@ namespace MyCourse.Models.Services.Application
 
             if (inputModel.Image != null)
             {
-               string ImagePath =  await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
-               DataSet dataSet = await db.QueryAsync($"UPDATE Courses SET ImagePath={ImagePath} WHERE Id = {inputModel.Id} ");
+               try{
+                string ImagePath =  await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+                dataSet = await db.QueryAsync($"UPDATE Courses SET ImagePath={ImagePath} WHERE Id = {inputModel.Id} ");
+               }
+               catch(Exception exc)
+               {
+                   throw new CourseImageInvalidException(inputModel.Id, exc);
+               }
             }
 
             CourseDetailViewModel course = await GetCourseAsync(inputModel.Id);

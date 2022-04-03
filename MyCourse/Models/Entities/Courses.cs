@@ -83,5 +83,14 @@ namespace MyCourse.Models.Entities
             Description=newDescription;
         }
         public virtual ICollection<Lesson> Lessons { get; private set; }
+
+        internal void ChangeImagePath(string imagePath)
+        {
+            if(string.IsNullOrEmpty(imagePath))
+            {
+                throw new NotImplementedException();
+            }
+            ImagePath = imagePath;
+        }
     }
 }

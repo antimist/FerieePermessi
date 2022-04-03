@@ -12,6 +12,7 @@ using MyCourse.Models.ViewModels;
 using MyCourse.Models.Services.Application;
 using Microsoft.Data.Sqlite;
 using MyCourse.Models.Exceptions;
+using Mycurse.Models.Services.Infrastructure;
 
 namespace MyCourse.Models.Services.Application.Courses
 {
@@ -21,11 +22,13 @@ namespace MyCourse.Models.Services.Application.Courses
         
         private readonly MyCourseDbContext dbContext;
         private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
+        private readonly IImagePersister imagePersister;
 
-        public EfCoreCourseService(MyCourseDbContext dbContext, IOptionsMonitor<CoursesOptions> coursesOptions)
+        public EfCoreCourseService(MyCourseDbContext dbContext, IImagePersister imagePersister, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
             this.dbContext = dbContext;
             this.coursesOptions = coursesOptions;
+            this.imagePersister = imagePersister;
         }
         public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {

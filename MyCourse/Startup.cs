@@ -21,6 +21,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using MyCourse.Customizations.ModelBinders;
 using Mycurse.Models.Services.Infrastructure;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace MyCourse
 {
@@ -100,6 +101,7 @@ namespace MyCourse
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<MemoryCacheOptions>(Configuration.GetSection("MemoryCache"));
+            services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

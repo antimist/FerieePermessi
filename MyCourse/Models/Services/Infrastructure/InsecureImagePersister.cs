@@ -25,8 +25,8 @@ namespace  Mycurse.Models.Services.Infrastructure
             string physicalPath = Path.Combine(env.WebRootPath, "Courses" ,$"{courseID}.jpg");
             using FileStream fileStream = File.OpenWrite(physicalPath);
             await formFile.CopyToAsync(fileStream);
+            
             // TODO: Restituire il percorso del file
-
             return path;
         }
     }
