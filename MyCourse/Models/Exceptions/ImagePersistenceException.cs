@@ -1,22 +1,23 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace MyCourse.Models.Services.Infrastructure
+namespace MyCourse.Models.Exceptions.Infrastructure
 {
     [Serializable]
-    internal class ImagePersistenceException : Exception
+    public class ImagePersistenceException : Exception
     {
         private Exception exc;
 
-        public ImagePersistenceException()
+        public ImagePersistenceException(Exception innerException) : base("Couldn't persist the image", innerException)
         {
+           // this.exc = exc;
         }
 
-        public ImagePersistenceException(Exception exc)
+/*        public ImagePersistenceException(Exception exc)
         {
             this.exc = exc;
         }
-
+*/
         public ImagePersistenceException(string message) : base(message)
         {
         }

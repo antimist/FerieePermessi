@@ -7,6 +7,7 @@ using ImageMagick;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Mycurse.Models.Services.Infrastructure;
+using MyCourse.Models.Exceptions.Infrastructure;
 
 namespace MyCourse.Models.Services.Infrastructure
 {
