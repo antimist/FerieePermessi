@@ -29,6 +29,9 @@ namespace MyCourse.Models.Services.Infrastructure
                 // Mapping per gli owned types
                 //CurrentPrice_Amount
                 //CurrentPrice_Currency
+                entity.HasIndex(course => course.Title).IsUnique();
+                entity.Property(course => course.RowVersion).IsRowVersion();
+
                 entity.OwnsOne(curse => curse.CurrentPrice, builder =>{
                     builder.Property(money => money.Currency).HasConversion<string>()
                     .HasColumnName("CurrentPrice_Currency");

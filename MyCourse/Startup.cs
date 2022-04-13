@@ -55,16 +55,16 @@ namespace MyCourse
             ;
             
             //Usiamo ADO.NET o Entity Famework Core per l'accesso ai dati?
-            //var persistence = Persistence.EfCore;
+           // var persistence = persistence.EfCore;
             //switch (persistence)
             //{
             //    case Persistence.AdoNet:
-                    services.AddTransient<ICourseService, AdoNetCourseService>();
-                    services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
+            //        services.AddTransient<ICourseService, AdoNetCourseService>();
+            //        services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
             //    break;
             //
-            //    case Persistance.EfCore:
-                    //services.AddTransient<ICourseService, EfCoreCourseService>();
+            //   case Persistance.EfCore:
+                    services.AddTransient<ICourseService, EfCoreCourseService>();
                     services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
                         string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
                         optionsBuilder.UseSqlite(connectionString);

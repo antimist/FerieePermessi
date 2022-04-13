@@ -50,6 +50,7 @@ namespace MyCourse.Models.InputModels
         public Money CurrentPrice {get; set;}     
         [Display (Name = "Nuova immagine...")]
         public IFormFile Image {get; set;}
+        public string RowVersion { get;  set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
@@ -80,7 +81,7 @@ namespace MyCourse.Models.InputModels
                     Convert.ToDecimal(courseRow["CurrentPrice_Amount"])
                 ),
                 Id = Convert.ToInt32(courseRow["Id"]),
-                //RowVersion = Convert.ToString(courseRow["RowVersion"])
+                RowVersion = Convert.ToString(courseRow["RowVersion"])
             };
             return courseEditInputModel;            
         }
@@ -95,7 +96,8 @@ namespace MyCourse.Models.InputModels
                 ImagePath = course.ImagePath,
                 Email = course.Email,
                 FullPrice = course.FullPrice,
-                CurrentPrice = course.CurrentPrice
+                CurrentPrice = course.CurrentPrice,
+                RowVersion = course.RowVersion
             };
             throw new NotImplementedException();
         }

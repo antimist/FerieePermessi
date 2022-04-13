@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Enums;
 using MyCourse.Models.Exceptions;
+using MyCourse.Models.Exceptions.Application;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Services.Application;
 using MyCourse.Models.ViewModels;
@@ -45,7 +46,7 @@ namespace MyCourse.Controllers
 
         public async Task<IActionResult> Detail(int id)
         {
-            CourseDetailViewModel viewModel = await  courseService.GetCourseAsync(id);
+            CourseDetailViewModel viewModel = await courseService.GetCourseAsync(id);
             ViewData["Title"] = viewModel.Title;
             return View(viewModel);
         }
@@ -60,35 +61,43 @@ namespace MyCourse.Controllers
             ViewData["Title"] = "Nuovo Corso";
             var inputModel = new CourseCreateInputModel();
             return View(inputModel);
-        } 
-        
-      //public IActionResult Edit(int id)
-      //{
-      //    ViewData["Title"] = "Modifica Corso";
-      //    return View();
-      //}
+        }
+
+        //public IActionResult Edit(int id)
+        //{
+        //    ViewData["Title"] = "Modifica Corso";
+        //    return View();
+        //}
 
         public async Task<IActionResult> Edit(int id)
         {
             ViewData["Title"] = "Modifica corso";
             CourseEditInputModel inputModel = await courseService.GetCourseForEditingAsync(id);
             return View(inputModel);
-        }  
+        }
 
         [HttpPost]
         public async Task<IActionResult> Edit(CourseEditInputModel inputModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     CourseDetailViewModel course = await courseService.EditCourseAsync(inputModel);
                     TempData["ConfirmationMessage"] = "I dati sono stati salvati con successo";
-                    return RedirectToAction(nameof(Detail), new {id =inputModel.Id});
+                    return RedirectToAction(nameof(Detail), new { id = inputModel.Id });
                 }
                 catch (CourseTitleUnaviableException)
                 {
                     ModelState.AddModelError(nameof(CourseDetailViewModel.Title), "Questo titolo già esiste");
+                }
+                catch (CourseImageInvalidException)
+                {
+                    ModelState.AddModelError(nameof(CourseEditInputModel.Image), "L'immagine selezionata non è valida");
+                }
+                catch (OptimisticConcurrencyException)
+                {
+                    ModelState.AddModelError("", "Spiacenti, il salvataggio non è andato a buon fine perché nel frattempo un altro utente ha aggiornato il corso. Ti preghiamo di aggiornare la pagina e ripetere le modifiche.");
                 }
             }
 
@@ -96,9 +105,9 @@ namespace MyCourse.Controllers
             return View(inputModel);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CourseCreateInputModel  inputModel)
+        public async Task<IActionResult> Create(CourseCreateInputModel inputModel)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -112,13 +121,13 @@ namespace MyCourse.Controllers
             }
 
             ViewData["Title"] = "Nuovo Corso";
-            return View(inputModel);            
+            return View(inputModel);
             //Convolgere un servizio applicativo in modo che il corso venga creato
             //CourseDetailViewModel course = await courseService.CreateCurseAsync(inputModel);
             //return RedirectToAction(nameof (Index));
-        }  
+        }
 
-        public async Task<IActionResult> IsTitleAviable(string title, int id=0)
+        public async Task<IActionResult> IsTitleAviable(string title, int id = 0)
         {
             bool result = await courseService.IsTitleAviableAsync(title, id);
             return Json(result);

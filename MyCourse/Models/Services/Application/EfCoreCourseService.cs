@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MyCourse.Models.Entities;
+using MyCourse.Models.Exceptions.Application;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
@@ -16,10 +17,10 @@ using Mycurse.Models.Services.Infrastructure;
 
 namespace MyCourse.Models.Services.Application.Courses
 {
-   
+
     public class EfCoreCourseService : ICourseService
     {
-        
+
         private readonly MyCourseDbContext dbContext;
         private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
         private readonly IImagePersister imagePersister;
@@ -35,23 +36,25 @@ namespace MyCourse.Models.Services.Application.Courses
             CourseDetailViewModel viewModel = await dbContext.Courses
                 .AsNoTracking()
                 .Where(course => course.Id == id)
-                .Select(course => new CourseDetailViewModel{
-                    Id          = course.Id,
-                    Title       = course.Title,
+                .Select(course => new CourseDetailViewModel
+                {
+                    Id = course.Id,
+                    Title = course.Title,
                     Description = course.Description,
-                    Author      = course.Author,
-                    ImagePath   = course.ImagePath,
-                    Rating      = course.Rating,
-                    CurrentPrice= course.CurrentPrice,
-                    FullPrice   = course.FullPrice, 
-                    Lessons     = course.Lessons.Select(lesson => new LessonViewModel {
-                        Id          = lesson.Id,
-                        Title       = lesson.Title,
+                    Author = course.Author,
+                    ImagePath = course.ImagePath,
+                    Rating = course.Rating,
+                    CurrentPrice = course.CurrentPrice,
+                    FullPrice = course.FullPrice,
+                    Lessons = course.Lessons.Select(lesson => new LessonViewModel
+                    {
+                        Id = lesson.Id,
+                        Title = lesson.Title,
                         Description = lesson.Description,
-                        Duration    = lesson.Duration
+                        Duration = lesson.Duration
                     }).ToList()
                 })
-                .SingleAsync();                ;
+                .SingleAsync(); ;
 
             return viewModel;
         }
@@ -69,7 +72,7 @@ namespace MyCourse.Models.Services.Application.Courses
             ListViewModel<CourseViewModel> result = await GetCoursesAsync(inputModel);
             return result.Results;
         }
-                                
+
         public async Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
         {
             CourseListInputModel inputModel = new CourseListInputModel(
@@ -85,10 +88,10 @@ namespace MyCourse.Models.Services.Application.Courses
         }
         public async Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
-                        
+
             IQueryable<Course> baseQuery = dbContext.Courses;
 
-            switch(model.OrderBy)
+            switch (model.OrderBy)
             {
                 case "Title":
                     if (model.Ascending)
@@ -101,25 +104,25 @@ namespace MyCourse.Models.Services.Application.Courses
                     }
                     break;
                 case "Rating":
-                    if(model.Ascending)
+                    if (model.Ascending)
                     {
                         baseQuery = baseQuery.OrderBy(course => course.Rating);
                     }
                     else
                     {
                         baseQuery = baseQuery.OrderByDescending(course => course.Rating);
-                    }     
-                    break;    
+                    }
+                    break;
                 case "CurrentPrice":
-                    if(model.Ascending)
+                    if (model.Ascending)
                     {
                         baseQuery = baseQuery.OrderBy(course => course.CurrentPrice.Amount);
                     }
                     else
                     {
                         baseQuery = baseQuery.OrderByDescending(course => course.CurrentPrice.Amount);
-                    }     
-                    break;    
+                    }
+                    break;
                 default:
                     break;
 
@@ -129,19 +132,20 @@ namespace MyCourse.Models.Services.Application.Courses
             .Where(course => course.Title.Contains(model.Search))
             .AsNoTracking()
             .Select(course =>
-            new CourseViewModel{
-                Id          = course.Id,
-                Title       = course.Title,
-                ImagePath   = course.ImagePath,
-                Author      = course.Author,
-                Rating      = course.Rating,
-                CurrentPrice= course.CurrentPrice,
-                FullPrice   = course.FullPrice
+            new CourseViewModel
+            {
+                Id = course.Id,
+                Title = course.Title,
+                ImagePath = course.ImagePath,
+                Author = course.Author,
+                Rating = course.Rating,
+                CurrentPrice = course.CurrentPrice,
+                FullPrice = course.FullPrice
             });
 
             List<CourseViewModel> courses = await queryLinq
             .Skip(model.Offset)
-            .Take(model.Limit)            
+            .Take(model.Limit)
             .ToListAsync();
             int totalCount = await queryLinq.CountAsync();
 
@@ -155,19 +159,19 @@ namespace MyCourse.Models.Services.Application.Courses
 
         public async Task<CourseDetailViewModel> CreateCurseAsync(CourseCreateInputModel inputModel)
         {
-           // throw new NotImplementedException();
-           string title = inputModel.Title;
-           string author = "Mario Rossi";
-           var course = new Course(title, author);
-           dbContext.Add(course);
-           await dbContext.SaveChangesAsync();
+            // throw new NotImplementedException();
+            string title = inputModel.Title;
+            string author = "Mario Rossi";
+            var course = new Course(title, author);
+            dbContext.Add(course);
+            await dbContext.SaveChangesAsync();
 
-           return CourseDetailViewModel.FromEntity(course);
+            return CourseDetailViewModel.FromEntity(course);
         }
 
         public async Task<bool> IsTitleAviableAsync(string title, int id)
         {
-            bool  titleExists = await dbContext.Courses.AnyAsync(course => EF.Functions.Like(course.Title, title));
+            bool titleExists = await dbContext.Courses.AnyAsync(course => EF.Functions.Like(course.Title, title));
             return !titleExists;
         }
 
@@ -175,26 +179,47 @@ namespace MyCourse.Models.Services.Application.Courses
         {
             Course course = await dbContext.Courses.FindAsync(inputModel.Id);
 
+            if (course == null)
+            {
+                throw new CourseNotFoundException(inputModel.Id);
+            }
+
             course.ChangeTitle(inputModel.Title);
             course.ChangePrices(inputModel.FullPrice, inputModel.CurrentPrice);
             course.ChangeDescription(inputModel.Description);
             course.ChangeEmail(inputModel.Email);
 
-            string ImagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
-            course.ChangeImagePath(ImagePath);
+            dbContext.Entry(course).Property(course => course.RowVersion).OriginalValue = inputModel.RowVersion;
+
+            if (inputModel.Image != null)
+            {
+                try
+                {
+                    string ImagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
+                    course.ChangeImagePath(ImagePath);
+                }
+                catch(Exception exc)
+                {
+                    throw new CourseImageInvalidException(inputModel.Id, exc);
+                }
+            }
 
             //dbContext.Update(course)
 
-           try
-           {
-               await dbContext.SaveChangesAsync();
-           }
-           catch (DbUpdateException exc ) when ((exc.InnerException as SqliteException)?.SqliteErrorCode ==19 )
-           {
-               throw new CourseTitleUnaviableException(inputModel.Title, exc);
-           } 
+            try
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) 
+            {
+                throw new OptimisticConcurrencyException();
+            }
+            catch (DbUpdateException exc) when ((exc.InnerException as SqliteException)?.SqliteErrorCode == 19)
+            {
+                throw new CourseTitleUnaviableException(inputModel.Title, exc);
+            }
 
-           return CourseDetailViewModel.FromEntity(course);
+            return CourseDetailViewModel.FromEntity(course);
         }
 
         public async Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
@@ -213,7 +238,7 @@ namespace MyCourse.Models.Services.Application.Courses
             }
 
             return viewModel;
-        }        
+        }
 
     }
 }
