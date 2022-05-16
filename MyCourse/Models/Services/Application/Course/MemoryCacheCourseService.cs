@@ -5,12 +5,11 @@ using Microsoft.Extensions.Caching.Memory;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
-using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModels;
-namespace MyCourse.Models.Services.Application
+namespace MyCourse.Models.Services.Application.Course
 {
-    public class MemoryCacheCourseService : ICachedCourseService   
+    public class MemoryCacheCourseService : ICachedCourseService
     {
         private readonly ICourseService courseService;
         private readonly IMemoryCache memoryCache;
@@ -20,7 +19,7 @@ namespace MyCourse.Models.Services.Application
             this.memoryCache = memoryCache;
         }
 
-        public Task<CourseDetailViewModel> GetCourseAsync(int id)
+        public Task<CourseDetailViewModel> GetCourseAsync(long id)
         {
             return memoryCache.GetOrCreateAsync($"Course{id}", cacheEntry =>
             {
@@ -29,8 +28,8 @@ namespace MyCourse.Models.Services.Application
                 return courseService.GetCourseAsync(id);
             });
         }
-        
-        public  Task<List<CourseViewModel>> GetBestRatingCoursesAsync()
+
+        public Task<List<CourseViewModel>> GetBestRatingCoursesAsync()
         {
             return memoryCache.GetOrCreateAsync($"BestRatingCourses", cacheEntry =>
             {
@@ -39,7 +38,7 @@ namespace MyCourse.Models.Services.Application
             });
         }
 
-        public  Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
+        public Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
         {
             return memoryCache.GetOrCreateAsync($"MostRecentCourses", cacheEntry =>
             {
@@ -52,10 +51,10 @@ namespace MyCourse.Models.Services.Application
             // le più visitate dagli utenti, e che perchiò mi prmettono di avere il maggior beneficio dalla cache.
             // E inoltre, metto in cache i risultati  solo se l'utente non ha cercato nulla.
             // In questo modo riduco drasticamente il consumo di memoria RAM
-            bool canCache = model.Page <=5 && string.IsNullOrEmpty(model.Search);
-            
+            bool canCache = model.Page <= 5 && string.IsNullOrEmpty(model.Search);
+
             //Se canCache è true, sfrutto il meccanismo di caching
-            if(canCache)
+            if (canCache)
             {
                 return memoryCache.GetOrCreateAsync($"Courses{model.Search}-{model.Page}-{model.OrderBy}-{model.Ascending}", cacheEntry =>
                 {
@@ -72,16 +71,16 @@ namespace MyCourse.Models.Services.Application
             return courseService.CreateCurseAsync(inputModel);
         }
 
-        public Task<bool> IsTitleAviableAsync(string title, int id)
+        public Task<bool> IsTitleAviableAsync(string title, long id)
         {
             return courseService.IsTitleAviableAsync(title, id);
         }
 
-        public Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
+        public Task<CourseEditInputModel> GetCourseForEditingAsync(long id)
         {
             return courseService.GetCourseForEditingAsync(id);
         }
-                
+
         public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel inputModel)
         {
             CourseDetailViewModel viewModel = await courseService.EditCourseAsync(inputModel);

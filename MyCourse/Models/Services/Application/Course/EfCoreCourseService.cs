@@ -10,12 +10,11 @@ using MyCourse.Models.InputModels;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ViewModels;
-using MyCourse.Models.Services.Application;
 using Microsoft.Data.Sqlite;
 using MyCourse.Models.Exceptions;
 using Mycurse.Models.Services.Infrastructure;
 
-namespace MyCourse.Models.Services.Application.Courses
+namespace MyCourse.Models.Services.Application.Course
 {
 
     public class EfCoreCourseService : ICourseService
@@ -31,7 +30,7 @@ namespace MyCourse.Models.Services.Application.Courses
             this.coursesOptions = coursesOptions;
             this.imagePersister = imagePersister;
         }
-        public async Task<CourseDetailViewModel> GetCourseAsync(int id)
+        public async Task<CourseDetailViewModel> GetCourseAsync(long id)
         {
             CourseDetailViewModel viewModel = await dbContext.Courses
                 .AsNoTracking()
@@ -89,7 +88,7 @@ namespace MyCourse.Models.Services.Application.Courses
         public async Task<ListViewModel<CourseViewModel>> GetCoursesAsync(CourseListInputModel model)
         {
 
-            IQueryable<Course> baseQuery = dbContext.Courses;
+            IQueryable<Entities.Course> baseQuery = dbContext.Courses;
 
             switch (model.OrderBy)
             {
@@ -162,14 +161,14 @@ namespace MyCourse.Models.Services.Application.Courses
             // throw new NotImplementedException();
             string title = inputModel.Title;
             string author = "Mario Rossi";
-            var course = new Course(title, author);
+            var course = new Entities.Course(title, author);
             dbContext.Add(course);
             await dbContext.SaveChangesAsync();
 
             return CourseDetailViewModel.FromEntity(course);
         }
 
-        public async Task<bool> IsTitleAviableAsync(string title, int id)
+        public async Task<bool> IsTitleAviableAsync(string title, long id)
         {
             bool titleExists = await dbContext.Courses.AnyAsync(course => EF.Functions.Like(course.Title, title));
             return !titleExists;
@@ -177,7 +176,9 @@ namespace MyCourse.Models.Services.Application.Courses
 
         public async Task<CourseDetailViewModel> EditCourseAsync(CourseEditInputModel inputModel)
         {
-            Course course = await dbContext.Courses.FindAsync(inputModel.Id);
+           // MyCourse.Models
+           // Course
+            var course = await dbContext.Courses.FindAsync(inputModel.Id);
 
             if (course == null)
             {
@@ -198,7 +199,7 @@ namespace MyCourse.Models.Services.Application.Courses
                     string ImagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
                     course.ChangeImagePath(ImagePath);
                 }
-                catch(Exception exc)
+                catch (Exception exc)
                 {
                     throw new CourseImageInvalidException(inputModel.Id, exc);
                 }
@@ -210,7 +211,7 @@ namespace MyCourse.Models.Services.Application.Courses
             {
                 await dbContext.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException) 
+            catch (DbUpdateConcurrencyException)
             {
                 throw new OptimisticConcurrencyException();
             }
@@ -222,7 +223,7 @@ namespace MyCourse.Models.Services.Application.Courses
             return CourseDetailViewModel.FromEntity(course);
         }
 
-        public async Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
+        public async Task<CourseEditInputModel> GetCourseForEditingAsync(long id)
         {
             IQueryable<CourseEditInputModel> queryLinq = dbContext.Courses
                 .AsNoTracking()

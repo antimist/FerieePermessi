@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;  // <-- sono rimasto qui
 using System.Threading.Tasks;
+using ImageMagick;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,7 +21,7 @@ using Mycurse.Models.Services.Infrastructure;
   using MyCourse.Models.Services.Application;
  using ImageMagick; */
 
-namespace MyCourse.Models.Services.Application
+namespace MyCourse.Models.Services.Application.Course
 {
     public class AdoNetCourseService : ICourseService
     {
@@ -37,7 +38,7 @@ namespace MyCourse.Models.Services.Application
             this.logger = logger;
             this.db = db;
         }
-        public async Task<CourseDetailViewModel> GetCourseAsync(int id)
+        public async Task<CourseDetailViewModel> GetCourseAsync(long id)
         {
             logger.LogInformation("Course {id} requested", id);
 
@@ -132,12 +133,15 @@ namespace MyCourse.Models.Services.Application
                                                      VALUES ({title}, {author}, '/Courses/default.png',  0, 'EUR', 'EUR', 0); 
                                                      SELECT last_insert_rowid();"); 
                 */
+                // modifica come da sezione 17 lezione 130
+                // ------------------------- INIZIO --------------------------
                 var courseId = await db.QueryScalarAsync<int>($@"INSERT INTO Courses (Title, Author, ImagePath, CurrentPrice_Amount, 
                                                             CurrentPrice_Currency, FullPrice_Currency, FullPrice_Amount) 
                                                      VALUES ({title}, {author}, '/Courses/default.png',  0, 'EUR', 'EUR', 0); 
                                                      SELECT last_insert_rowid();");
 
                 //int courseId = Convert.ToInt32(dataSet.Tables[0].Rows[0][0]);
+                // ------------------------- FINE --------------------------
                 CourseDetailViewModel course = await GetCourseAsync(courseId);
                 return course;
             }
@@ -146,7 +150,7 @@ namespace MyCourse.Models.Services.Application
                 throw new CourseTitleUnaviableException(title, exc);
             }
         }
-        public async Task<bool> IsTitleAviableAsync(string title, int id)
+        public async Task<bool> IsTitleAviableAsync(string title, long id)
         {
             bool titleExist = await db.QueryScalarAsync<bool>($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title} AND ID<>{id}");
             //bool titleAviable = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
@@ -154,8 +158,8 @@ namespace MyCourse.Models.Services.Application
             return titleAviable;
         }
 
-        //public async Task<CourseEditInputModel> GetCourseEditInputModelAsync(int id)
-        public async Task<CourseEditInputModel> GetCourseForEditingAsync(int id)
+        //public async Task<CourseEditInputModel> GetCourseEditInputModelAsync(long id)
+        public async Task<CourseEditInputModel> GetCourseForEditingAsync(long id)
         {
             FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency, RowVersion FROM Courses WHERE Id={id}";
 
@@ -200,19 +204,27 @@ namespace MyCourse.Models.Services.Application
             {
                 throw new CourseTitleUnaviableException(inputModel.Title, exc);
             }
+            // modifica come da sezione 17 lezione 130
+            // ------------------------- INIZIO --------------------------
             catch (ImagePersistenceException exc)
             {
                 throw new CourseImageInvalidException(inputModel.Id, exc);
             }
+            //------------------------- Finito --------------------------
 
             CourseDetailViewModel course = await GetCourseAsync(inputModel.Id);
             return course;
         }
 
-        public async Task<bool> IsTitleAvliableAsync(string title, int id)
+        public async Task<bool> IsTitleAvliableAsync(string title, long id)
         {
-            DataSet result = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title} AND id<>{id}");
-            bool titleAvailable = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
+            // modifica come da sezione 17 lezione 130
+            // ------------------------- INIZIO --------------------------
+            //DataSet result = await db.QueryAsync($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title} AND id<>{id}");
+            bool titleExists = await db.QueryScalarAsync<bool>($"SELECT COUNT(*) FROM Courses WHERE Title LIKE {title} AND id<>{id}");
+            //bool titleAvailable = Convert.ToInt32(result.Tables[0].Rows[0][0]) == 0;
+            bool titleAvailable = !titleExists;
+            // ------------------------- FINE --------------------------
             return titleAvailable;
         }
     }

@@ -15,7 +15,7 @@ using MyCourse.Models.Enums;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.Exceptions.Application;
 using MyCourse.Models.InputModels;
-using MyCourse.Models.Services.Application;
+using MyCourse.Models.Services.Application.Course;
 using MyCourse.Models.ViewModels;
 
 namespace MyCourse.Controllers
@@ -44,7 +44,7 @@ namespace MyCourse.Controllers
             return View(viewModel); //Content("Sono Index");
         }
 
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Detail(long id)
         {
             CourseDetailViewModel viewModel = await courseService.GetCourseAsync(id);
             ViewData["Title"] = viewModel.Title;
@@ -63,13 +63,13 @@ namespace MyCourse.Controllers
             return View(inputModel);
         }
 
-        //public IActionResult Edit(int id)
+        //public IActionResult Edit(long id)
         //{
         //    ViewData["Title"] = "Modifica Corso";
         //    return View();
         //}
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(long id)
         {
             ViewData["Title"] = "Modifica corso";
             CourseEditInputModel inputModel = await courseService.GetCourseForEditingAsync(id);
@@ -127,7 +127,7 @@ namespace MyCourse.Controllers
             //return RedirectToAction(nameof (Index));
         }
 
-        public async Task<IActionResult> IsTitleAviable(string title, int id = 0)
+        public async Task<IActionResult> IsTitleAviable(string title, long id = 0)
         {
             bool result = await courseService.IsTitleAviableAsync(title, id);
             return Json(result);

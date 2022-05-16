@@ -16,7 +16,7 @@ namespace MyCourse.Models.InputModels
     public class CourseEditInputModel : IValidatableObject
     {
         [Required]
-        public int Id {get; set;}
+        public long Id {get; set;}
 
         [Required(ErrorMessage = "Il titlolo è obbligatorio"),
          MinLength(10, ErrorMessage = "Il titlolo dev'essere almeno {1} caratteri"),

@@ -25,7 +25,7 @@ namespace MyCourse.Models.Services.Infrastructure
             this.env = env;
         }
 
-        public async Task<string> SaveCourseImageAsync(int courseId, IFormFile formFile)
+        public async Task<string> SaveCourseImageAsync(long courseId, IFormFile formFile)
         {
             //Il metodo WaitAsync ha anche un overload che permette di passare un timeout
             //Ad esempio, se vogliamo aspettare al massimo 1 secondo:

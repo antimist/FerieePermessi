@@ -16,7 +16,7 @@ namespace  Mycurse.Models.Services.Infrastructure
             this.env = env;
         }
 
-        public async Task<string> SaveCourseImageAsync(int courseID, IFormFile formFile)
+        public async Task<string> SaveCourseImageAsync(long courseID, IFormFile formFile)
         {
             // Come sanitizzare i nomi dei file https://bit.ly/sanitizzare-nome-file
 

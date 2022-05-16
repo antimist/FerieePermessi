@@ -65,7 +65,7 @@ namespace MyCourse.Models.Services.Infrastructure
             }
             string query = formattableQuery.ToString();
 
-            System.Console.WriteLine(formattableQuery.Format, formattableQuery.GetArguments());
+            //System.Console.WriteLine(formattableQuery.Format, formattableQuery.GetArguments());
             var cmd = new SqliteCommand(query, conn);
 
             cmd.Parameters.AddRange(sqliteParameters);

@@ -13,15 +13,14 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCourse.Models.Options;
-using MyCourse.Models.Services.Application;
 using MyCourse.Models.Services.Infrastructure;
-using MyCourse.Models.Services.Application.Courses;
 using Microsoft.Extensions.Hosting;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using MyCourse.Customizations.ModelBinders;
 using Mycurse.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using MyCourse.Models.Services.Application.Course;
 
 namespace MyCourse
 {

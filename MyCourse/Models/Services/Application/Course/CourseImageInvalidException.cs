@@ -1,12 +1,12 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace MyCourse.Models.Services.Application
+namespace MyCourse.Models.Services.Application.Course
 {
     [Serializable]
     internal class CourseImageInvalidException : Exception
     {
-        private int id;
+        private long id;
         private Exception exc;
 
         public CourseImageInvalidException()
@@ -17,7 +17,7 @@ namespace MyCourse.Models.Services.Application
         {
         }
 
-        public CourseImageInvalidException(int id, Exception exc)
+        public CourseImageInvalidException(long id, Exception exc)
         {
             this.id = id;
             this.exc = exc;

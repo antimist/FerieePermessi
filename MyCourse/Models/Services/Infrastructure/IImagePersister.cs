@@ -6,6 +6,6 @@ namespace  Mycurse.Models.Services.Infrastructure
     public interface IImagePersister
     {
         /// <returns> Return: The image URL e.g. /Courses/1.jpg</returns>
-        Task<string> SaveCourseImageAsync(int courseId, IFormFile formFile);
+        Task<string> SaveCourseImageAsync(long courseId, IFormFile formFile);
     }
 }
