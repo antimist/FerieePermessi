@@ -81,7 +81,10 @@ namespace MyCourse.Models.InputModels
                     Convert.ToDecimal(courseRow["CurrentPrice_Amount"])
                 ),
                 Id = Convert.ToInt32(courseRow["Id"]),
+            // modifica come da sezione 17 lezione 132
+            // ------------------------- INIZIO --------------------------                
                 RowVersion = Convert.ToString(courseRow["RowVersion"])
+            // ------------------------- FINE --------------------------                
             };
             return courseEditInputModel;            
         }

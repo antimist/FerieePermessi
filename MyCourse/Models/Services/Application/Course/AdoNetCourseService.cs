@@ -161,8 +161,12 @@ namespace MyCourse.Models.Services.Application.Course
         //public async Task<CourseEditInputModel> GetCourseEditInputModelAsync(long id)
         public async Task<CourseEditInputModel> GetCourseForEditingAsync(long id)
         {
+            // modifica come da sezione 17 lezione 132
+            // ------------------------- INIZIO --------------------------
+            // FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}";
             FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Email, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency, RowVersion FROM Courses WHERE Id={id}";
-
+            // ------------------------- FINE --------------------------
+            
             DataSet dataSet = await db.QueryAsync(query);
 
             var courseTable = dataSet.Tables[0];
@@ -185,8 +189,11 @@ namespace MyCourse.Models.Services.Application.Course
                 {
                     ImagePath = await imagePersister.SaveCourseImageAsync(inputModel.Id, inputModel.Image);
                 }
-
+                // modifica come da sezione 17 lezione 132
+                // ------------------------- INIZIO --------------------------
+                //int affectedRow = await db.CommandAsync($"UPDATE Courses SET ImagePath=COALESCE({ImagePath}, ImagePath), Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency.ToString()}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency.ToString()}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id={inputModel.Id}"); 
                 int affectedRow = await db.CommandAsync($"UPDATE Courses SET ImagePath=COALESCE({ImagePath}, ImagePath), Title={inputModel.Title}, Description={inputModel.Description}, Email={inputModel.Email}, CurrentPrice_Currency={inputModel.CurrentPrice.Currency.ToString()}, CurrentPrice_Amount={inputModel.CurrentPrice.Amount}, FullPrice_Currency={inputModel.FullPrice.Currency.ToString()}, FullPrice_Amount={inputModel.FullPrice.Amount} WHERE Id={inputModel.Id} AND RowVersion = {inputModel.RowVersion}");
+                // -------------------------- FINE ---------------------------
                 if (affectedRow == 0)
                 {
                     bool courseExist = await db.QueryScalarAsync<bool>($"SELEC COUNT(*) FROM Courses WHERE Id={inputModel.Id}");

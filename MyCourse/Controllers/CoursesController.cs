@@ -95,10 +95,13 @@ namespace MyCourse.Controllers
                 {
                     ModelState.AddModelError(nameof(CourseEditInputModel.Image), "L'immagine selezionata non è valida");
                 }
+                // modifica come da sezione 17 lezione 132
+                // ------------------------- INIZIO --------------------------                
                 catch (OptimisticConcurrencyException)
                 {
                     ModelState.AddModelError("", "Spiacenti, il salvataggio non è andato a buon fine perché nel frattempo un altro utente ha aggiornato il corso. Ti preghiamo di aggiornare la pagina e ripetere le modifiche.");
                 }
+                // ------------------------- FINE --------------------------
             }
 
             ViewData["Title"] = "Modifica corso";
