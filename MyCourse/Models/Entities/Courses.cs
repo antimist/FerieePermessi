@@ -9,18 +9,24 @@ namespace MyCourse.Models.Entities
     {
         public Course(string title, string author)
         {
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                throw new ArgumentException("The Course must have a title");
-            }
+            // Modifica come da sezione 17 lezione 139
+            // ----------------------- INIZIO ------------------------------
+            //if (string.IsNullOrWhiteSpace(title))
+            //{
+            //    throw new ArgumentException("The Course must have a title");
+            //}
+            //
+            //if (string.IsNullOrWhiteSpace(author))
+            //{
+            //    throw new ArgumentException("The Course must have a author");
+            //}
 
-            if (string.IsNullOrWhiteSpace(author))
-            {
-                throw new ArgumentException("The Course must have a author");
-            }
-
-            Title   = title;
-            Author  = author;
+            //Title   = title;
+            //Author  = author;
+            ChangeTitle(title);
+            ChangeAuthor(author);
+            ChangeStatus(CourseStatus.Draft);
+             // ----------------------- FINE ------------------------------
             Lessons = new HashSet<Lesson>();
             CurrentPrice = new Money(Currency.EUR, 0);
             FullPrice = new Money(Currency.EUR, 0);
@@ -38,6 +44,13 @@ namespace MyCourse.Models.Entities
         public Money FullPrice { get; private set; }
         public Money CurrentPrice { get; private set; }
         public string RowVersion { get; private set; }
+        public CourseStatus Status {get; private set;}
+
+        public void ChangeStatus (CourseStatus newStatus)
+        {
+            //TODO: LOGICA DI VALIDAZIONE
+            Status= newStatus;
+        }
 
         public void ChangeTitle(string newTitle)
         {
@@ -92,6 +105,15 @@ namespace MyCourse.Models.Entities
                 throw new NotImplementedException();
             }
             ImagePath = imagePath;
+        }
+
+        public void ChangeAuthor(string newAuthor)
+        {
+            if (string.IsNullOrWhiteSpace(newAuthor))
+            {
+               throw new ArgumentException("The Course must have a author");
+            }
+            Author = newAuthor;
         }
     }
 }

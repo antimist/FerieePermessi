@@ -21,6 +21,8 @@ using MyCourse.Customizations.ModelBinders;
 using Mycurse.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using MyCourse.Models.Services.Application.Course;
+using Microsoft.AspNetCore.Identity;
+using MyCourse.Models.Enums;
 
 namespace MyCourse
 {
@@ -38,6 +40,8 @@ namespace MyCourse
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddResponseCaching();
+            services.AddRazorPages();
+
             services.AddMvc(options =>
             {
                 var homeProfile = new CacheProfile();
@@ -54,22 +58,23 @@ namespace MyCourse
             ;
             
             //Usiamo ADO.NET o Entity Famework Core per l'accesso ai dati?
-           // var persistence = persistence.EfCore;
-            //switch (persistence)
-            //{
-            //    case Persistence.AdoNet:
-            //        services.AddTransient<ICourseService, AdoNetCourseService>();
-            //        services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
-            //    break;
-            //
-            //   case Persistance.EfCore:
+            var persistence = Persistence.EfCore;
+            switch (persistence)
+            {
+                case Persistence.AdoNet:
+                    services.AddTransient<ICourseService, AdoNetCourseService>();
+                    services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
+                break;
+            
+               case Persistence.EfCore:
+                    services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<MyCourseDbContext>();
                     services.AddTransient<ICourseService, EfCoreCourseService>();
                     services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
                         string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("Default");
                         optionsBuilder.UseSqlite(connectionString);
                     });
-            //    break;
-            //}
+                break;
+            }
 
             services.AddTransient<ICachedCourseService, MemoryCacheCourseService>(); // se vuoi disattivare la cache devi commentare questa riga
 
@@ -134,11 +139,15 @@ namespace MyCourse
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseResponseCaching();
 
             //EndPointMiddleware
             app.UseEndpoints(routeBuilder => {
                 routeBuilder.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routeBuilder.MapRazorPages();
             });
             //app.UseMvcWithDefaultRoute();
             /*

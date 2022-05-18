@@ -6,10 +6,12 @@ using ImageMagick;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MyCourse.Models.Enums;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.Exceptions.Application;
 using MyCourse.Models.Exceptions.Infrastructure;
 using MyCourse.Models.InputModels;
+using MyCourse.Models.InputModels.Courses;
 using MyCourse.Models.Options;
 using MyCourse.Models.Services.Infrastructure;
 using MyCourse.Models.ValueTypes;
@@ -41,9 +43,12 @@ namespace MyCourse.Models.Services.Application.Course
         public async Task<CourseDetailViewModel> GetCourseAsync(long id)
         {
             logger.LogInformation("Course {id} requested", id);
+        // modifica come da sezione 17 lezione 132
+        // ------------------------- INIZIO --------------------------
 
-            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id}
+            FormattableString query = $@"SELECT Id, Title, Description, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Id={id} AND Status <>{nameof(CourseStatus.Deleted)}
                            ; SELECT Id, Title, Description, Duration FROM Lessons WHERE CourseId={id}";
+        // ------------------------- FINE --------------------------
 
             DataSet dataSet = await db.QueryAsync(query);
 
@@ -101,8 +106,8 @@ namespace MyCourse.Models.Services.Application.Course
             string orderby = model.OrderBy == "CurrentPrice" ? "CurrentPrice_Amount" : model.OrderBy;
             string direction = model.Ascending ? "ASC" : "DESC";
 
-            FormattableString query = $@"SELECT Id, Title, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Title LIKE {"%" + model.Search + "%"} ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset};
-            SELECT COUNT(*) FROM Courses WHERE Title LIKE {"%" + model.Search + "%"}";
+            FormattableString query = $@"SELECT Id, Title, ImagePath, Author, Rating, FullPrice_Amount, FullPrice_Currency, CurrentPrice_Amount, CurrentPrice_Currency FROM Courses WHERE Title LIKE {"%" + model.Search + "%"} AND Status <>{nameof(CourseStatus.Deleted)} ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {model.Limit} OFFSET {model.Offset};
+            SELECT COUNT(*) FROM Courses WHERE Title LIKE {"%" + model.Search + "%"} AND Status <>{nameof(CourseStatus.Deleted)}";
             DataSet dataSet = await db.QueryAsync(query);
             var dataTable = dataSet.Tables[0];
             var curseList = new List<CourseViewModel>();
@@ -234,5 +239,17 @@ namespace MyCourse.Models.Services.Application.Course
             // ------------------------- FINE --------------------------
             return titleAvailable;
         }
+
+        // modifica come da sezione 17 lezione 132
+        //------------------------- INIZIO --------------------------
+        public async Task DeleteCourseAsync(CourseDeleteInputModel inputModel)
+        {
+            int affectedRow = await this.db.CommandAsync($"UPDATE Courses SET Status={nameof(CourseStatus.Deleted)} WHERE ID={inputModel.Id} AND Status <>{nameof(CourseStatus.Deleted)}");
+            if (affectedRow==0)
+            {
+                    throw new CourseNotFoundException(inputModel.Id);
+            }
+        }
+        // ------------------------- FINE --------------------------
     }
 }

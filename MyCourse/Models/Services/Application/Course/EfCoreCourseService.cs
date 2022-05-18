@@ -13,6 +13,8 @@ using MyCourse.Models.ViewModels;
 using Microsoft.Data.Sqlite;
 using MyCourse.Models.Exceptions;
 using Mycurse.Models.Services.Infrastructure;
+using MyCourse.Models.Enums;
+using MyCourse.Models.InputModels.Courses;
 
 namespace MyCourse.Models.Services.Application.Course
 {
@@ -241,5 +243,16 @@ namespace MyCourse.Models.Services.Application.Course
             return viewModel;
         }
 
+        public async Task DeleteCourseAsync(CourseDeleteInputModel inputModel)
+        {
+            
+            Entities.Course course = await dbContext.Courses.FindAsync(inputModel.Id);
+
+            if (course == null)
+            {
+                throw new CourseNotFoundException(inputModel.Id);
+            }
+            course.ChangeStatus(CourseStatus.Deleted);
+        }
     }
 }

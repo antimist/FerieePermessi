@@ -1,5 +1,4 @@
-Build started...
-Build succeeded.
+The EF Core tools version '3.0.3' is older than that of the runtime '3.1.5'. Update the tools for the latest features and bug fixes.
 info: Microsoft.EntityFrameworkCore.Infrastructure[10403]
       Entity Framework Core 3.1.5 initialized 'MyCourseDbContext' using provider 'Microsoft.EntityFrameworkCore.Sqlite' with options: MaxPoolSize=128 
 System.NotSupportedException: SQLite does not support this migration operation ('AlterColumnOperation'). For more information, see http://go.microsoft.com/fwlink/?LinkId=723262.

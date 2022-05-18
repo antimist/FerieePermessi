@@ -1,11 +1,12 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using MyCourse.Models.Entities;
 
 namespace MyCourse.Models.Services.Infrastructure 
 {
-    public partial class MyCourseDbContext : DbContext
+    public partial class MyCourseDbContext : IdentityDbContext
     {
 
         public MyCourseDbContext(DbContextOptions<MyCourseDbContext> options)
@@ -18,6 +19,8 @@ namespace MyCourse.Models.Services.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           
+            base.OnModelCreating(modelBuilder);
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity<Course>(entity =>
@@ -31,6 +34,7 @@ namespace MyCourse.Models.Services.Infrastructure
                 //CurrentPrice_Currency
                 entity.HasIndex(course => course.Title).IsUnique();
                 entity.Property(course => course.RowVersion).IsRowVersion();
+                entity.Property(course => course.Status).HasConversion<string>();
 
                 entity.OwnsOne(curse => curse.CurrentPrice, builder =>{
                     builder.Property(money => money.Currency).HasConversion<string>()
@@ -49,8 +53,8 @@ namespace MyCourse.Models.Services.Infrastructure
                       .WithOne(lesson => lesson.Course)
                       .HasForeignKey(lesson => lesson.CourseId)
                       ;
-                      
-
+                //Global QueryFilter      
+                entity.HasQueryFilter(course => course.Status != Enums.CourseStatus.Deleted);
                 #region mapping autogenerato dal Tool di reverse engineering
                 /*
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -98,6 +102,8 @@ namespace MyCourse.Models.Services.Infrastructure
 
             modelBuilder.Entity<Lesson>(entity =>
             {
+                entity.Property(lesson => lesson.RowVersion).IsRowVersion();
+                entity.Property(lesson => lesson.Order).HasDefaultValue(1000).ValueGeneratedNever();
             /*    entity.HasOne(lesson => lesson.Course)
                       .WithMany(course =>course.Lessons); */
 

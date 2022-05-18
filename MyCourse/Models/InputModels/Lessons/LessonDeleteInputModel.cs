@@ -6,6 +6,6 @@ namespace MyCourse.Models.InputModels.Lessons
     {
         [Required]
         public long id { get; set; }
-        public int CourseId { get; set; }
+        public long CourseId { get; set; }
     }
 }
