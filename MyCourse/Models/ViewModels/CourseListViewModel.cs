@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MyCourse.Models.InputModels;
+using MyCourse.Models.InputModels.Courses;
 
 namespace MyCourse.Models.ViewModels
 {
@@ -7,9 +8,6 @@ namespace MyCourse.Models.ViewModels
     {
         public ListViewModel<CourseViewModel> Courses {get; set;}
         public CourseListInputModel Input {get; set;}
-
-
-
 
         #region Implementazione IPaginationInfo
         int IPaginationInfo.CurrentPage => Input.Page;

@@ -65,7 +65,7 @@ namespace MyCourse.Models.Services.Application.Course
             CourseListInputModel inputModel = new CourseListInputModel(
                 search: "",
                 page: 1,
-                orderBy: "Rating",
+                orderby: "Rating",
                 ascending: false,
                 limit: coursesOptions.CurrentValue.InHome,
                 orderOptions: coursesOptions.CurrentValue.Order);
@@ -79,7 +79,7 @@ namespace MyCourse.Models.Services.Application.Course
             CourseListInputModel inputModel = new CourseListInputModel(
                 search: "",
                 page: 1,
-                orderBy: "Id",
+                orderby: "Id",
                 ascending: false,
                 limit: coursesOptions.CurrentValue.InHome,
                 orderOptions: coursesOptions.CurrentValue.Order);

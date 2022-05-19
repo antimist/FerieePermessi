@@ -6,6 +6,7 @@ using MyCourse.Models.ValueTypes;
 using MyCourse.Models.ViewModels;
 using System.Threading.Tasks;
 using MyCourse.Models.InputModels;
+using MyCourse.Models.InputModels.Courses;
 
 namespace MyCourse.Models.Services.Application.Course
 {

@@ -10,7 +10,7 @@ namespace MyCourse.Models.Exceptions.Infrastructure
 
         public ImagePersistenceException(Exception innerException) : base("Couldn't persist the image", innerException)
         {
-           // this.exc = exc;
+            this.exc = innerException;
         }
 
 /*        public ImagePersistenceException(Exception exc)

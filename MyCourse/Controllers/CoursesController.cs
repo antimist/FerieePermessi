@@ -15,6 +15,7 @@ using MyCourse.Models.Enums;
 using MyCourse.Models.Exceptions;
 using MyCourse.Models.Exceptions.Application;
 using MyCourse.Models.InputModels;
+using MyCourse.Models.InputModels.Courses;
 using MyCourse.Models.Services.Application.Course;
 using MyCourse.Models.ViewModels;
 

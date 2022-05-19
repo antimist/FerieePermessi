@@ -18,6 +18,7 @@ using MyCourse.Models.ValueTypes;
 using MyCourse.Models.ViewModels;
 using Mycurse.Models.Services.Infrastructure;
 
+
 /*using System.Linq;
   using MyCourse.Controllers;
   using MyCourse.Models.Services.Application;
@@ -76,10 +77,11 @@ namespace MyCourse.Models.Services.Application.Course
 
         public async Task<List<CourseViewModel>> GetMostRecentCoursesAsync()
         {
+
             CourseListInputModel inputModel = new CourseListInputModel(
                 search: "",
                 page: 1,
-                orderBy: "Id",
+                orderby: "Id",
                 ascending: false,
                 limit: coursesOptions.CurrentValue.InHome,
                 orderOptions: coursesOptions.CurrentValue.Order);
@@ -92,7 +94,7 @@ namespace MyCourse.Models.Services.Application.Course
             CourseListInputModel inputModel = new CourseListInputModel(
                 search: "",
                 page: 1,
-                orderBy: "Rating",
+                orderby: "Rating",
                 ascending: false,
                 limit: coursesOptions.CurrentValue.InHome,
                 orderOptions: coursesOptions.CurrentValue.Order);
@@ -250,6 +252,7 @@ namespace MyCourse.Models.Services.Application.Course
                     throw new CourseNotFoundException(inputModel.Id);
             }
         }
+
         // ------------------------- FINE --------------------------
     }
 }
