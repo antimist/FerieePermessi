@@ -79,6 +79,8 @@ namespace MyCourse
                         options.Password.RequireNonAlphanumeric=true;
                         options.Password.RequiredUniqueChars=4;
                         options.SignIn.RequireConfirmedAccount=true;
+                        options.Lockout.MaxFailedAccessAttempts=5;
+                        options.Lockout.DefaultLockoutTimeSpan=TimeSpan.FromMinutes(5);
                     })
                     .AddClaimsPrincipalFactory<CustomClaimsPrincipalFactory>()
                     .AddPasswordValidator<CommonPasswordValidator<ApplicationUser>>()
