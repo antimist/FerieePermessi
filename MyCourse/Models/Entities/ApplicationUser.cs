@@ -13,7 +13,7 @@ namespace MyCourse.Models.Entities
 
         public static ApplicationUser FromDataRow(DataRow userRow)
         {
-            ApplicationUser applicationUser = new()
+            ApplicationUser applicationUser = new ApplicationUser()
             {
                 Id = Convert.ToString(userRow["Id"]),
                 UserName = Convert.ToString(userRow["UserName"]),

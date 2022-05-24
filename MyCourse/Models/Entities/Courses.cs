@@ -7,7 +7,7 @@ namespace MyCourse.Models.Entities
 {
     public partial class Course
     {
-        public Course(string title, string author)
+        public Course(string title, string author, string authorId)
         {
             // Modifica come da sezione 17 lezione 139
             // ----------------------- INIZIO ------------------------------
@@ -24,7 +24,12 @@ namespace MyCourse.Models.Entities
             //Title   = title;
             //Author  = author;
             ChangeTitle(title);
-            ChangeAuthor(author);
+
+            // Modifica come da sezione 18 lezione 154
+            // ----------------------- INIZIO ------------------------------
+            //ChangeAuthor(author);
+            ChangeAuthor(author, authorId);
+            // ----------------------- FINE ------------------------------
             ChangeStatus(CourseStatus.Draft);
              // ----------------------- FINE ------------------------------
             Lessons = new HashSet<Lesson>();
@@ -35,6 +40,7 @@ namespace MyCourse.Models.Entities
         }
 
         public long Id { get; private set; }
+        public string AuthorId {get; set;}
         public string Title { get; private set; }
         public string Description { get; private set; }
         public string ImagePath { get; private set; }
@@ -45,6 +51,7 @@ namespace MyCourse.Models.Entities
         public Money CurrentPrice { get; private set; }
         public string RowVersion { get; private set; }
         public CourseStatus Status {get; private set;}
+        public virtual ApplicationUser AuthorUser {get; set;}
 
         public void ChangeStatus (CourseStatus newStatus)
         {
@@ -107,13 +114,20 @@ namespace MyCourse.Models.Entities
             ImagePath = imagePath;
         }
 
-        public void ChangeAuthor(string newAuthor)
+        public void ChangeAuthor(string newAuthor, string newAuthorId)
         {
             if (string.IsNullOrWhiteSpace(newAuthor))
             {
                throw new ArgumentException("The Course must have a author");
             }
+
+            if (string.IsNullOrWhiteSpace(newAuthorId))
+            {
+                throw new ArgumentException("The author must have a id");
+            }
+
             Author = newAuthor;
+            AuthorId = newAuthorId;
         }
     }
 }

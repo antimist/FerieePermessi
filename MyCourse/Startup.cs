@@ -24,6 +24,8 @@ using MyCourse.Models.Services.Application.Course;
 using Microsoft.AspNetCore.Identity;
 using MyCourse.Models.Enums;
 using MyCourse.Customizations.Identity;
+using MyCourse.Models.Entities;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace MyCourse
 {
@@ -69,15 +71,17 @@ namespace MyCourse
             
                case Persistence.EfCore:
                     
-                    services.AddDefaultIdentity<IdentityUser>(options => {
+                    services.AddDefaultIdentity<ApplicationUser>(options => {
                         options.Password.RequireDigit=true;
                         options.Password.RequiredLength=8;
                         options.Password.RequireUppercase=true;
                         options.Password.RequireLowercase=true;
                         options.Password.RequireNonAlphanumeric=true;
                         options.Password.RequiredUniqueChars=4;
+                        options.SignIn.RequireConfirmedAccount=true;
                     })
-                    .AddPasswordValidator<CommonPasswordValidator<IdentityUser>>()
+                    .AddClaimsPrincipalFactory<CustomClaimsPrincipalFactory>()
+                    .AddPasswordValidator<CommonPasswordValidator<ApplicationUser>>()
                     .AddEntityFrameworkStores<MyCourseDbContext>();
 
                     services.AddTransient<ICourseService, EfCoreCourseService>();
@@ -88,8 +92,6 @@ namespace MyCourse
                     });
                 break;
             }
-
-            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>(); // se vuoi disattivare la cache devi commentare questa riga
 
             #region Configurazione del sevizio di cache distribuita
             
@@ -110,15 +112,17 @@ namespace MyCourse
             //service.AddDistributedMemoryCache();
 
             #endregion
-
-            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
+            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>(); // se vuoi disattivare la cache devi commentare questa riga
+            //services.AddTransient<ICachedCourseService, MemoryCacheLessonService>();
             services.AddSingleton<IImagePersister, MagickNetImagePersister>();
+            services.AddSingleton<IEmailSender, MailKitEmailSender>();
 
             //Options
             services.Configure<CoursesOptions>(Configuration.GetSection("Courses"));
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<MemoryCacheOptions>(Configuration.GetSection("MemoryCache"));
             services.Configure<KestrelServerOptions>(Configuration.GetSection("Kestrel"));
+            services.Configure<SmtpOptions>(Configuration.GetSection("Smtp"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

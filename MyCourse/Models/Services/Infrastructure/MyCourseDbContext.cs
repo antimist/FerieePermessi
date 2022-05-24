@@ -6,7 +6,7 @@ using MyCourse.Models.Entities;
 
 namespace MyCourse.Models.Services.Infrastructure 
 {
-    public partial class MyCourseDbContext : IdentityDbContext
+    public partial class MyCourseDbContext : IdentityDbContext<ApplicationUser>
     {
 
         public MyCourseDbContext(DbContextOptions<MyCourseDbContext> options)
@@ -21,7 +21,7 @@ namespace MyCourse.Models.Services.Infrastructure
         {
            
             base.OnModelCreating(modelBuilder);
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+           // modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
             modelBuilder.Entity<Course>(entity =>
             {
@@ -49,6 +49,10 @@ namespace MyCourse.Models.Services.Infrastructure
                 });
 
                 //mapping per le relazioni
+                entity.HasOne(curse => curse.AuthorUser)
+                      .WithMany(user => user.AuthoredCourses)
+                      .HasForeignKey(curse => curse.AuthorId);
+
                 entity.HasMany(curse => curse.Lessons)
                       .WithOne(lesson => lesson.Course)
                       .HasForeignKey(lesson => lesson.CourseId)

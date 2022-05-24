@@ -15,22 +15,29 @@ using MyCourse.Models.Exceptions;
 using Mycurse.Models.Services.Infrastructure;
 using MyCourse.Models.Enums;
 using MyCourse.Models.InputModels.Courses;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 
 namespace MyCourse.Models.Services.Application.Course
 {
 
     public class EfCoreCourseService : ICourseService
     {
-
+        private readonly ILogger<EfCoreCourseService> logger;
         private readonly MyCourseDbContext dbContext;
         private readonly IOptionsMonitor<CoursesOptions> coursesOptions;
         private readonly IImagePersister imagePersister;
 
-        public EfCoreCourseService(MyCourseDbContext dbContext, IImagePersister imagePersister, IOptionsMonitor<CoursesOptions> coursesOptions)
+        private readonly IHttpContextAccessor httpContextAccessor;
+
+        public EfCoreCourseService(IHttpContextAccessor httpContextAccessor, ILogger<EfCoreCourseService> logger, MyCourseDbContext dbContext, IImagePersister imagePersister, IOptionsMonitor<CoursesOptions> coursesOptions)
         {
-            this.dbContext = dbContext;
+            this.httpContextAccessor = httpContextAccessor;
+            this.imagePersister= imagePersister;
             this.coursesOptions = coursesOptions;
-            this.imagePersister = imagePersister;
+            this.logger = logger;
+            this.dbContext = dbContext;
         }
         public async Task<CourseDetailViewModel> GetCourseAsync(long id)
         {
@@ -162,8 +169,23 @@ namespace MyCourse.Models.Services.Application.Course
         {
             // throw new NotImplementedException();
             string title = inputModel.Title;
-            string author = "Mario Rossi";
-            var course = new Entities.Course(title, author);
+            string author; 
+            string authorId;
+            try
+            {
+                author = httpContextAccessor.HttpContext.User.FindFirst("FullName").Value; //"Mario Rossi";
+                authorId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value; 
+            }
+            catch
+            {
+                    throw new UserUnknownException();
+            }
+
+            // Modifica come da sezione 18 lezione 154
+            // ----------------------- INIZIO ------------------------------
+            //var course = new Entities.Course(title, author);
+            var course = new Entities.Course(title, author, authorId);
+            // ----------------------- FINE ------------------------------
             dbContext.Add(course);
             await dbContext.SaveChangesAsync();
 

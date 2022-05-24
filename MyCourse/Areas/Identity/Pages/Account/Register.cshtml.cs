@@ -94,7 +94,7 @@ namespace MyCourse.Areas.Identity.Pages.Account
 
                     if (user.Email.Equals(_usersOptions.CurrentValue.AssignAdministratorRoleOnRegistration, StringComparison.OrdinalIgnoreCase))
                     {
-                        Claim claim = new (ClaimTypes.Role, "Administrator");
+                        Claim claim = new Claim(ClaimTypes.Role, "Administrator");
                         IdentityResult roleAssignmentResult = await _userManager.AddClaimAsync(user, claim);
                         if (!roleAssignmentResult.Succeeded)
                         {

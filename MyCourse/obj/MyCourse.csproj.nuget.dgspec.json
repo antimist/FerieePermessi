@@ -30,7 +30,6 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -42,7 +41,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "HtmlSanitizer": {
               "target": "Package",
@@ -51,6 +49,10 @@
             "Magick.NET-Q8-AnyCPU": {
               "target": "Package",
               "version": "[7.15.4, )"
+            },
+            "MailKit": {
+              "target": "Package",
+              "version": "[2.9.0, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
